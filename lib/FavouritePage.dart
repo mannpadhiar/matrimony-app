@@ -11,159 +11,160 @@ class Favouritepage extends StatefulWidget {
 }
 
 class _FavouritepageState extends State<Favouritepage> {
+
+  SqliteDatabase sb = SqliteDatabase();
+  @override
+  void initState() {
+    super.initState();
+    sb.initDatabase();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xadf90c71),
-                Color(0xcf9f1761),
-              ],
-            )
-        ),
-        child:Column(
-          children: [
-            (favouriteUser.isEmpty)?Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Container(
-                height: 40,
-                width: double.infinity,
-                decoration:BoxDecoration(
-                  color: Colors.white.withAlpha(90),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(child: Text('no data found',style: TextStyle(fontWeight: FontWeight.bold))),
-              ),
-            ):
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ListView.builder(
-                  itemCount: favouriteUser.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      color: Colors.white.withAlpha(90),
-                      elevation: 1,
-                      shadowColor: Colors.white,
-                      child: SizedBox(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              //
-                              //details
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+      body:Expanded(
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: ListView.builder(
+            itemCount: users.length,
+            itemBuilder: (context, index) {
+              return users[index]['isFavourite'] == 1 ?InkWell(
+                onTap: (){
+                  showDialog(context: context, builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Details'),
+                      content: Container(
+                        // color: Colors.white.withAlpha(90),
+                        height: 300,
+                        width: 100,
+                        child: Column(
+                          children: [
+                            //name
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              //name
+                              child: Row(
                                 children: [
-                                  //name
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    //name
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.person),
-                                        SizedBox(width: 8),
-                                        Text(favouriteUser[index]['name']),
-                                      ],
-                                    ),
-                                  ),
-
-                                  //email
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    //name
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.mail),
-                                        SizedBox(width: 8),
-                                        Text(favouriteUser[index]['email']),
-                                      ],
-                                    ),
-                                  ),
-
-                                  //city
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    //name
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.location_city),
-                                        SizedBox(width: 8),
-                                        Text(favouriteUser[index]['selectedCity'])
-                                      ],
-                                    ),
-                                  ),
-
-                                  //mobile number
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.phone),
-                                        SizedBox(width: 8),
-                                        Text(favouriteUser[index]['number'])
-                                      ],
-                                    ),
-                                  ),
-
-                                  //date of birth
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.date_range),
-                                        SizedBox(width: 8),
-                                        Text(favouriteUser[index]['dateOfBirth'])
-                                      ],
-                                    ),
-                                  ),
-
-                                  //age
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.numbers),
-                                        SizedBox(width: 8),
-                                        Text(((int.parse(DateTime.now().year.toString()) - int.parse(favouriteUser[index]['dateOfBirth'].toString().substring(6,10)))).toString()),
-                                      ],
-                                    ),
-                                  ),
-
-                                  //gender
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      children: [
-                                        Icon((favouriteUser[index]['gender'] == 'Male')?(Icons.male):(Icons.female) ),
-                                        SizedBox(width: 8),
-                                        Text(favouriteUser[index]['gender']),
-                                      ],
-                                    ),
-                                  ),
+                                  Icon(Icons.person),
+                                  SizedBox(width: 8),
+                                  Text(users[index]['name']),
                                 ],
                               ),
-                              //
-                              //delete button
-                              IconButton(onPressed: (){setState(() {
-                                int userIndex = users.indexWhere((user) => user['number'] == favouriteUser[index]['number']);
-                                favouriteUser.removeAt(index);
-                                users[userIndex]['isFavourite'] = false;
-                              });}, icon: Icon(Icons.delete)),
-                            ],
-                          )
+                            ),
+
+                            //email
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              //name
+                              child: Row(
+                                children: [
+                                  Icon(Icons.mail),
+                                  SizedBox(width: 8),
+                                  Text(users[index]['email']),
+                                ],
+                              ),
+                            ),
+
+                            //mobile number
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.phone),
+                                  SizedBox(width: 8),
+                                  Text(users[index]['number'])
+                                ],
+                              ),
+                            ),
+
+                            //city
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              //name
+                              child: Row(
+                                children: [
+                                  Icon(Icons.location_city),
+                                  SizedBox(width: 8),
+                                  Text(users[index]['selectedCity'])
+                                ],
+                              ),
+                            ),
+
+                            //date of birth
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.date_range),
+                                  SizedBox(width: 8),
+                                  Text(users[index]['dateOfBirth'])
+                                ],
+                              ),
+                            ),
+
+                            //age
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.numbers),
+                                  SizedBox(width: 8),
+                                  Text(((int.parse(DateTime.now().year.toString()) - int.parse(users[index]['dateOfBirth'].toString().substring(6,10)))).toString()),
+                                ],
+                              ),
+                            ),
+
+                            //gender
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  Icon((users[index]['gender'] == 'Male')?(Icons.male):(Icons.female) ),
+                                  SizedBox(width: 8),
+                                  Text(users[index]['gender']),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
-                  },
+                  },);
+                },
+                child: Card(
+                  color: Colors.white.withAlpha(90),
+                  elevation: 1,
+                  shadowColor: Colors.white,
+                  child: SizedBox(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        //
+                        //details
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          //name
+                          child: Row(
+                            children: [
+                              Icon(Icons.person),
+                              SizedBox(width: 8),
+                              Text(users[index]['name']),
+                            ],
+                          ),
+                        ),
+                        //
+                        //unlike
+                        IconButton(onPressed: () async{
+                          await sb.updateUserFavourite(users[index]['id'],0);
+                          setState(() {});
+                        }, icon: Icon(Icons.favorite_outlined)),
+                      ],
+                    )
+                  ),
                 ),
-              ),
-            ),
-          ],
+              ):SizedBox();
+            },
+          ),
         ),
       ),
     );

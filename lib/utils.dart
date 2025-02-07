@@ -128,7 +128,7 @@ class SqliteDatabase {
 
   Future<void> fetchUsers() async{
     final List<Map<String, dynamic>> tempUser = await _userDatabase.query('usersInformation');
-    usersInfo = tempUser;
+    users = tempUser;
   }
 
   Future<void> deleteUsers(int id) async{
@@ -156,6 +156,17 @@ class SqliteDatabase {
       where: 'id = ?',
       whereArgs: [id],
     );
+    await fetchUsers();
+  }
+
+  Future<void> updateUserFavourite(int id,int isFavNum) async{
+    await
+     _userDatabase.update(
+       'usersInformation',
+       {'isFavourite' : isFavNum},
+       where: 'id = ?',
+       whereArgs: [id],
+     );
     await fetchUsers();
   }
 }

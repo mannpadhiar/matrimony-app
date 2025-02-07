@@ -17,7 +17,15 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  var usersInformation = [{}];
+
+  SqliteDatabase sd = SqliteDatabase();
+
+  @override
+  void initState() {
+    super.initState();
+    sd.initDatabase();
+  }
+
   int bottomNavigationIndex = 0;
 
   bool isRecentFirstSignIn() {
@@ -94,6 +102,8 @@ class _HomepageState extends State<Homepage> {
                 //userList
                 InkWell(
                   onTap: (){
+                    print(usersInfo);
+                    print(users);
                     setState(() {
                       currentIndex = 1;
                     });

@@ -22,7 +22,6 @@ class _AddPageState extends State<AddPage> {
   void initState() {
     super.initState();
     sd.initDatabase();
-    sd.initDatabase();
   }
 
   int bottomNavigationBarIndex = 0;
@@ -324,21 +323,21 @@ class _AddPageState extends State<AddPage> {
                       isValidateUser = validateInputs();
                       if(isValidateUser){
                         setState(() {
-                          users.add(
-                            {
-                              'name':name.text,
-                              'number':number.text,
-                              'email':email.text,
-                              'gender':gender,
-                              'dateOfBirth':dateOfBirth.text,
-                              'selectedCity':selectedCity,
-                              "isGames" :isGames?1:0,
-                              "isMovies" :isMovies?1:0,
-                              "isMusic" :isMusic?1:0,
-                              "isDance" :isDance?1:0,
-                              'isFavourite':isFav?1:0,
-                            },
-                          );
+                          // users.add(
+                          //   {
+                          //     'name':name.text,
+                          //     'number':number.text,
+                          //     'email':email.text,
+                          //     'gender':gender,
+                          //     'dateOfBirth':dateOfBirth.text,
+                          //     'selectedCity':selectedCity,
+                          //     "isGames" :isGames?1:0,
+                          //     "isMovies" :isMovies?1:0,
+                          //     "isMusic" :isMusic?1:0,
+                          //     "isDance" :isDance?1:0,
+                          //     'isFavourite':isFav?1:0,
+                          //   },
+                          // );
 
                           sd.addUsers({
                             'name':name.text,
