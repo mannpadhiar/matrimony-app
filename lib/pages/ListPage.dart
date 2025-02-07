@@ -271,7 +271,6 @@ class _ListPageState extends State<ListPage> {
                                       children: [
                                         //favourite
                                         IconButton(onPressed: () async{
-                                          print(users[index]);
                                           if(users[index]['isFavourite'] == 1){
                                             await sb.updateUserFavourite(users[index]['id'],0);
                                           }
@@ -327,7 +326,7 @@ class _ListPageState extends State<ListPage> {
                                                             contentPadding: EdgeInsets.all(10.0),
                                                             filled: true,
                                                             counterStyle: TextStyle(color: Colors.white),
-                                                            fillColor: Colors.white.withOpacity(0.2),
+                                                            fillColor: Colors.white,
                                                             border: OutlineInputBorder(
                                                               borderRadius: BorderRadius.all(Radius.circular(12)),
                                                               borderSide: BorderSide.none,
@@ -347,7 +346,7 @@ class _ListPageState extends State<ListPage> {
                                                             hintStyle: TextStyle(color: Colors.white54),
                                                             contentPadding: EdgeInsets.all(10.0),
                                                             filled: true,
-                                                            fillColor: Colors.white.withOpacity(0.2),
+                                                            fillColor: Colors.white,
                                                             border: OutlineInputBorder(
                                                               borderRadius: BorderRadius.all(Radius.circular(12)),
                                                               borderSide: BorderSide.none,
@@ -370,7 +369,7 @@ class _ListPageState extends State<ListPage> {
                                                             hintStyle: TextStyle(color: Colors.white54),
                                                             contentPadding: EdgeInsets.all(10.0),
                                                             filled: true,
-                                                            fillColor: Colors.white.withOpacity(0.2),
+                                                            fillColor: Colors.white,
                                                             border: OutlineInputBorder(
                                                               borderRadius: BorderRadius.all(Radius.circular(12)),
                                                               borderSide: BorderSide.none,
@@ -403,7 +402,7 @@ class _ListPageState extends State<ListPage> {
                                                             hintStyle: TextStyle(color: Colors.white54),
                                                             contentPadding: EdgeInsets.all(10.0),
                                                             filled: true,
-                                                            fillColor: Colors.white.withOpacity(0.2),
+                                                            fillColor: Colors.white,
                                                             border: OutlineInputBorder(
                                                               borderRadius: BorderRadius.all(Radius.circular(12)),
                                                               borderSide: BorderSide.none,
@@ -537,7 +536,6 @@ class _ListPageState extends State<ListPage> {
                                                           updateUserFun(users[index]['id'],updatedUsers);
                                                         });
 
-                                                        print(users);
                                                         clerInput();
                                                         Navigator.pop(context);
                                                       }
