@@ -22,6 +22,12 @@ class _AddPageState extends State<AddPage> {
   void initState() {
     super.initState();
     sd.initDatabase();
+    numberFocusNode.addListener(() {
+      print('---------------lost focus!!!!!-------------------------');
+      if(!numberFocusNode.hasFocus){
+        phoneNumberValidation();
+      }
+    },);
   }
 
   int bottomNavigationBarIndex = 0;
@@ -37,11 +43,6 @@ class _AddPageState extends State<AddPage> {
       return false;
     }
 
-    if (!phoneValidation.hasMatch(number.text)) {
-      showError("Enter a valid Mobile Number");
-      return false;
-    }
-
     if (name.text.isEmpty) {
       showError("Enter Your Name");
       return false;
@@ -51,12 +52,27 @@ class _AddPageState extends State<AddPage> {
       showError("Enter Your Hobbies");
       return false;
     }
+
     if(selectedCity == null) {
       showError("Enter Your City");
       return false;
     }
+
+    if (!phoneValidation.hasMatch(number.text)) {
+      showError("Enter a valid Mobile Number");
+      return false;
+    }
+
     if((int.parse(DateTime.now().year.toString()) - int.parse(dateOfBirth.text.substring(6,10))) < 18){
       showError("You are not 18+");
+      return false;
+    }
+    return true;
+  }
+
+  bool phoneNumberValidation(){
+    if (!phoneValidation.hasMatch(number.text)) {
+      showError("Enter a valid Mobile Number");
       return false;
     }
     return true;
@@ -160,6 +176,7 @@ class _AddPageState extends State<AddPage> {
                   keyboardType: TextInputType.number,
                   maxLength: 10,
                   controller: number,
+                  focusNode: numberFocusNode,
                   decoration: InputDecoration(
                     counterStyle: TextStyle(color: Colors.white),
                     prefixIcon: Icon(Icons.phone, color: Colors.white),

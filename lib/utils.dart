@@ -44,6 +44,8 @@ TextEditingController number = TextEditingController();
 TextEditingController dateOfBirth = TextEditingController();
 TextEditingController searchUser = TextEditingController();
 
+FocusNode numberFocusNode = FocusNode();
+
 String? search;
 
 bool isFavourite = false;

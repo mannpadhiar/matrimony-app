@@ -35,7 +35,7 @@ class _FavouritepageState extends State<Favouritepage> {
                       title: Text('Details'),
                       content: Container(
                         // color: Colors.white.withAlpha(90),
-                        height: 300,
+                        height: 330,
                         width: 100,
                         child: Column(
                           children: [
@@ -47,7 +47,7 @@ class _FavouritepageState extends State<Favouritepage> {
                                 children: [
                                   Icon(Icons.person),
                                   SizedBox(width: 8),
-                                  Text(users[index]['name']),
+                                  Expanded(child: Text(users[index]['name'],softWrap: true,)),
                                 ],
                               ),
                             ),
@@ -148,7 +148,7 @@ class _FavouritepageState extends State<Favouritepage> {
                             children: [
                               Icon(Icons.person),
                               SizedBox(width: 8),
-                              Text(users[index]['name']),
+                              Text(users[index]['name'].length > 15 ? users[index]['name'].toString().substring(0,25) + '.....':users[index]['name']),
                             ],
                           ),
                         ),

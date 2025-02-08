@@ -148,7 +148,7 @@ class _ListPageState extends State<ListPage> {
                                   title: Text('Details'),
                                   content: Container(
                                     // color: Colors.white.withAlpha(90),
-                                    height: 300,
+                                    height: 350,
                                     width: 100,
                                     child: Column(
                                       children: [
@@ -160,7 +160,7 @@ class _ListPageState extends State<ListPage> {
                                             children: [
                                               Icon(Icons.person),
                                               SizedBox(width: 8),
-                                              Text(users[index]['name']),
+                                              Expanded(child: Text(users[index]['name'],softWrap: true,)),
                                             ],
                                           ),
                                         ),
@@ -261,7 +261,7 @@ class _ListPageState extends State<ListPage> {
                                         children: [
                                           Icon(Icons.person),
                                           SizedBox(width: 8),
-                                          Text(users[index]['name']),
+                                          Text(users[index]['name'].length > 20? users[index]['name'].toString().substring(0,15) + '...' : users[index]['name']),
                                         ],
                                       ),
                                     ),
@@ -326,7 +326,7 @@ class _ListPageState extends State<ListPage> {
                                                             contentPadding: EdgeInsets.all(10.0),
                                                             filled: true,
                                                             counterStyle: TextStyle(color: Colors.white),
-                                                            fillColor: Colors.white,
+                                                            fillColor: Colors.white30,
                                                             border: OutlineInputBorder(
                                                               borderRadius: BorderRadius.all(Radius.circular(12)),
                                                               borderSide: BorderSide.none,
@@ -346,7 +346,7 @@ class _ListPageState extends State<ListPage> {
                                                             hintStyle: TextStyle(color: Colors.white54),
                                                             contentPadding: EdgeInsets.all(10.0),
                                                             filled: true,
-                                                            fillColor: Colors.white,
+                                                            fillColor: Colors.white30,
                                                             border: OutlineInputBorder(
                                                               borderRadius: BorderRadius.all(Radius.circular(12)),
                                                               borderSide: BorderSide.none,
@@ -369,7 +369,7 @@ class _ListPageState extends State<ListPage> {
                                                             hintStyle: TextStyle(color: Colors.white54),
                                                             contentPadding: EdgeInsets.all(10.0),
                                                             filled: true,
-                                                            fillColor: Colors.white,
+                                                            fillColor: Colors.white30,
                                                             border: OutlineInputBorder(
                                                               borderRadius: BorderRadius.all(Radius.circular(12)),
                                                               borderSide: BorderSide.none,
@@ -402,7 +402,7 @@ class _ListPageState extends State<ListPage> {
                                                             hintStyle: TextStyle(color: Colors.white54),
                                                             contentPadding: EdgeInsets.all(10.0),
                                                             filled: true,
-                                                            fillColor: Colors.white,
+                                                            fillColor: Colors.white30,
                                                             border: OutlineInputBorder(
                                                               borderRadius: BorderRadius.all(Radius.circular(12)),
                                                               borderSide: BorderSide.none,
