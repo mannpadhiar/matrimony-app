@@ -58,6 +58,147 @@ class _ListPageState extends State<ListPage> {
     sb.initDatabase();
   }
 
+  Future<void> showBottomSheetList(BuildContext context, Map<String, dynamic> user) {
+    return showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Container(
+          padding: EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Heading
+              Center(
+                child: Text(
+                  'User Information',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepPurple,
+                  ),
+                ),
+              ),
+              SizedBox(height: 15),
+
+              // User Details
+              Row(
+                children: [
+                  Text(
+                    'Name:',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      user['name'],
+                      style: TextStyle(fontSize: 16, color: Colors.black54),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  Text(
+                    'Number:',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      user['number'],
+                      style: TextStyle(fontSize: 16, color: Colors.black54),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  Text(
+                    'E-mail:',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      user['email'],
+                      style: TextStyle(fontSize: 16, color: Colors.black54),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  Text(
+                    'Date of Birth:',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      user['dateOfBirth'],
+                      style: TextStyle(fontSize: 16, color: Colors.black54),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  Text(
+                    'City:',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      user['selectedCity'],
+                      style: TextStyle(fontSize: 16, color: Colors.black54),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+
+              Divider(height: 30, thickness: 1.2),
+
+              // Exit Button
+              Align(
+                alignment: Alignment.center,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.deepPurple,
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text('Close', style: TextStyle(fontSize: 16, color: Colors.white)),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
   void showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -138,106 +279,107 @@ class _ListPageState extends State<ListPage> {
                           }
                           return isVisible?InkWell(
                             onTap: (){
-                              showDialog(context: context, builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Details'),
-                                  content: Container(
-                                    // color: Colors.white.withAlpha(90),
-                                    height: 350,
-                                    width: 100,
-                                    child: Column(
-                                      children: [
-                                        //name
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          //name
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.person),
-                                              SizedBox(width: 8),
-                                              Expanded(child: Text(users[index]['name'],softWrap: true,)),
-                                            ],
-                                          ),
-                                        ),
-
-                                        //email
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          //name
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.mail),
-                                              SizedBox(width: 8),
-                                              Text(users[index]['email']),
-                                            ],
-                                          ),
-                                        ),
-
-                                        //mobile number
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.phone),
-                                              SizedBox(width: 8),
-                                              Text(users[index]['number'])
-                                            ],
-                                          ),
-                                        ),
-
-                                        //city
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          //name
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.location_city),
-                                              SizedBox(width: 8),
-                                              Text(users[index]['selectedCity'])
-                                            ],
-                                          ),
-                                        ),
-
-                                        //date of birth
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.date_range),
-                                              SizedBox(width: 8),
-                                              Text(users[index]['dateOfBirth'])
-                                            ],
-                                          ),
-                                        ),
-
-                                        //age
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            children: [
-                                              Icon(Icons.numbers),
-                                              SizedBox(width: 8),
-                                              Text(((int.parse(DateTime.now().year.toString()) - int.parse(users[index]['dateOfBirth'].toString().substring(6,10)))).toString()),
-                                            ],
-                                          ),
-                                        ),
-
-                                        //gender
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            children: [
-                                              Icon((users[index]['gender'] == 'Male')?(Icons.male):(Icons.female) ),
-                                              SizedBox(width: 8),
-                                              Text(users[index]['gender']),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },);
+                              showBottomSheetList(context,users[index]);
+                              // showDialog(context: context, builder: (BuildContext context) {
+                              //   return AlertDialog(
+                              //     title: Text('Details'),
+                              //     content: Container(
+                              //       // color: Colors.white.withAlpha(90),
+                              //       height: 350,
+                              //       width: 100,
+                              //       child: Column(
+                              //         children: [
+                              //           //name
+                              //           Padding(
+                              //             padding: const EdgeInsets.all(8.0),
+                              //             //name
+                              //             child: Row(
+                              //               children: [
+                              //                 Icon(Icons.person),
+                              //                 SizedBox(width: 8),
+                              //                 Expanded(child: Text(users[index]['name'],softWrap: true,)),
+                              //               ],
+                              //             ),
+                              //           ),
+                              //
+                              //           //email
+                              //           Padding(
+                              //             padding: const EdgeInsets.all(8.0),
+                              //             //name
+                              //             child: Row(
+                              //               children: [
+                              //                 Icon(Icons.mail),
+                              //                 SizedBox(width: 8),
+                              //                 Text(users[index]['email']),
+                              //               ],
+                              //             ),
+                              //           ),
+                              //
+                              //           //mobile number
+                              //           Padding(
+                              //             padding: const EdgeInsets.all(8.0),
+                              //             child: Row(
+                              //               children: [
+                              //                 Icon(Icons.phone),
+                              //                 SizedBox(width: 8),
+                              //                 Text(users[index]['number'])
+                              //               ],
+                              //             ),
+                              //           ),
+                              //
+                              //           //city
+                              //           Padding(
+                              //             padding: const EdgeInsets.all(8.0),
+                              //             //name
+                              //             child: Row(
+                              //               children: [
+                              //                 Icon(Icons.location_city),
+                              //                 SizedBox(width: 8),
+                              //                 Text(users[index]['selectedCity'])
+                              //               ],
+                              //             ),
+                              //           ),
+                              //
+                              //           //date of birth
+                              //           Padding(
+                              //             padding: const EdgeInsets.all(8.0),
+                              //             child: Row(
+                              //               children: [
+                              //                 Icon(Icons.date_range),
+                              //                 SizedBox(width: 8),
+                              //                 Text(users[index]['dateOfBirth'])
+                              //               ],
+                              //             ),
+                              //           ),
+                              //
+                              //           //age
+                              //           Padding(
+                              //             padding: const EdgeInsets.all(8.0),
+                              //             child: Row(
+                              //               children: [
+                              //                 Icon(Icons.numbers),
+                              //                 SizedBox(width: 8),
+                              //                 Text(((int.parse(DateTime.now().year.toString()) - int.parse(users[index]['dateOfBirth'].toString().substring(6,10)))).toString()),
+                              //               ],
+                              //             ),
+                              //           ),
+                              //
+                              //           //gender
+                              //           Padding(
+                              //             padding: const EdgeInsets.all(8.0),
+                              //             child: Row(
+                              //               children: [
+                              //                 Icon((users[index]['gender'] == 'Male')?(Icons.male):(Icons.female) ),
+                              //                 SizedBox(width: 8),
+                              //                 Text(users[index]['gender']),
+                              //               ],
+                              //             ),
+                              //           ),
+                              //         ],
+                              //       ),
+                              //     ),
+                              //   );
+                              // },);
                             },
                             child: Card(
                               color: Colors.deepPurpleAccent.withAlpha(20),
