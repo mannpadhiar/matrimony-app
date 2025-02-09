@@ -48,6 +48,8 @@ FocusNode numberFocusNode = FocusNode();
 
 String? search;
 
+bool isFavEmpty = true;
+
 bool isFavourite = false;
 bool isGames = false;
 bool isMovies = false;

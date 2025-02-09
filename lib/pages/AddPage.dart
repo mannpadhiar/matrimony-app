@@ -15,7 +15,6 @@ class AddPage extends StatefulWidget {
 }
 
 class _AddPageState extends State<AddPage> {
-
   SqliteDatabase sd = SqliteDatabase();
 
   @override
@@ -23,54 +22,48 @@ class _AddPageState extends State<AddPage> {
     super.initState();
     sd.initDatabase();
     numberFocusNode.addListener(() {
-      print('---------------lost focus!!!!!-------------------------');
-      if(!numberFocusNode.hasFocus){
+      if (!numberFocusNode.hasFocus) {
         phoneNumberValidation();
       }
-    },);
+    });
   }
 
   int bottomNavigationBarIndex = 0;
-
-
   RegExp emailValidation = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
   RegExp phoneValidation = RegExp(r'^\+?[0-9]{10,15}$');
   bool isValidateUser = false;
 
-  bool validateInputs()  {
+  bool validateInputs() {
     if (!emailValidation.hasMatch(email.text)) {
       showError("Enter a valid Email");
       return false;
     }
-
     if (name.text.isEmpty) {
       showError("Enter Your Name");
       return false;
     }
-
-    if(selectedHobbies.isEmpty){
+    if (selectedHobbies.isEmpty) {
       showError("Enter Your Hobbies");
       return false;
     }
-
-    if(selectedCity == null) {
+    if (selectedCity == null) {
       showError("Enter Your City");
       return false;
     }
-
     if (!phoneValidation.hasMatch(number.text)) {
       showError("Enter a valid Mobile Number");
       return false;
     }
-
-    if((int.parse(DateTime.now().year.toString()) - int.parse(dateOfBirth.text.substring(6,10))) < 18){
+    if ((int.parse(DateTime.now().year.toString()) -
+        int.parse(dateOfBirth.text.substring(6, 10))) <
+        18) {
       showError("You are not 18+");
       return false;
     }
     return true;
   }
 
-  bool phoneNumberValidation(){
+  bool phoneNumberValidation() {
     if (!phoneValidation.hasMatch(number.text)) {
       showError("Enter a valid Mobile Number");
       return false;
@@ -83,9 +76,43 @@ class _AddPageState extends State<AddPage> {
       SnackBar(
         content: Text(
           message,
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(fontWeight: FontWeight.w500),
         ),
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.red.shade400,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        margin: EdgeInsets.all(16),
+      ),
+    );
+  }
+
+  InputDecoration _buildInputDecoration(String hint, IconData icon) {
+    return InputDecoration(
+      prefixIcon: Container(
+        margin: EdgeInsets.only(left: 12, right: 8),
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(icon, color: Theme.of(context).primaryColor, size: 22),
+      ),
+      hintText: hint,
+      hintStyle: TextStyle(color: Colors.grey.shade400),
+      filled: true,
+      fillColor: Colors.grey.shade50,
+      contentPadding: EdgeInsets.all(20),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: Colors.grey.shade200, width: 2),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
       ),
     );
   }
@@ -94,314 +121,328 @@ class _AddPageState extends State<AddPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xadf90c71),
-              Color(0xcf9f1761),
-              // Colors.pinkAccent,
-            ],
-          ),
+          // color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
         ),
-        child: Container(
-          height: double.infinity,
-          padding: EdgeInsets.all(20),
-          decoration:BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-            color: Colors.black12,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 18,
-                offset: Offset(0, 10), // Subtle shadow effect
-              ),
-            ],
-          ),
+        child: SafeArea(
           child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //
-                //name
-                Text('name',style: TextStyle(color: Colors.white),),
-                SizedBox(height: 5,),
-                TextFormField(
-                  maxLength: 50,
-                  controller: name,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.drive_file_rename_outline, color: Colors.white),
-                    hintText: 'Enter your Name',
-                    hintStyle: TextStyle(color: Colors.white54),
-                    contentPadding: EdgeInsets.all(10.0),
-                    filled: true,
-                    counterStyle: TextStyle(color: Colors.white),
-                    fillColor: Colors.white.withOpacity(0.2),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                      borderSide: BorderSide.none,
-                    ),
+                // add card
+                Container(
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  style: TextStyle(fontSize: 15, color: Colors.white,),
-                ),
-                //
-                //Email Address
-                Text('E-mail',style: TextStyle(color: Colors.white),),
-                SizedBox(height: 5,),
-                TextFormField(
-                  controller: email,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.email, color: Colors.white),
-                    hintText: 'Enter your E-mail',
-                    hintStyle: TextStyle(color: Colors.white54),
-                    contentPadding: EdgeInsets.all(10.0),
-                    filled: true,
-                    fillColor: Colors.white.withOpacity(0.2),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                      borderSide: BorderSide.none,
-                    ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.person_add_rounded,
+                        size: 40,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      SizedBox(width: 16),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Create Profile',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                          Text(
+                            'Enter your information below',
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  style: TextStyle(fontSize: 15, color: Colors.white),
                 ),
-                SizedBox(height: 20,),
-                //
-                //mobile number
-                Text('Mobile Number',style: TextStyle(color: Colors.white),),
-                SizedBox(height: 5,),
+                SizedBox(height: 32),
+
+                // Form Fields
+                _buildSectionTitle('Personal Details', Icons.person_outline),
+                SizedBox(height: 16),
+                _buildFormField('Full Name', Icons.person, name, maxLength: 50),
+                _buildFormField('Email Address', Icons.email, email,
+                    keyboardType: TextInputType.emailAddress),
+                _buildFormField('Mobile Number', Icons.phone, number,
+                    keyboardType: TextInputType.number,
+                    maxLength: 10,
+                    focusNode: numberFocusNode),
+
+                // Date of Birth Field
+                _buildSectionTitle('Date of Birth', Icons.cake_outlined),
+                SizedBox(height: 16),
                 TextFormField(
-                  keyboardType: TextInputType.number,
-                  maxLength: 10,
-                  controller: number,
-                  focusNode: numberFocusNode,
-                  decoration: InputDecoration(
-                    counterStyle: TextStyle(color: Colors.white),
-                    prefixIcon: Icon(Icons.phone, color: Colors.white),
-                    hintText: 'Enter Mobile Number',
-                    hintStyle: TextStyle(color: Colors.white54),
-                    contentPadding: EdgeInsets.all(10.0),
-                    filled: true,
-                    fillColor: Colors.white.withOpacity(0.2),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  style: TextStyle(fontSize: 15, color: Colors.white),
-                ),
-                //
-                //date
-                Text('Date Of Birth',style: TextStyle(color: Colors.white),),
-                SizedBox(height: 5,),
-                TextFormField(
-                  keyboardType: TextInputType.datetime,
-                  readOnly: true,
                   controller: dateOfBirth,
-                  onTap: ()async{
-                    DateTime? selectedDate = await showDatePicker(
+                  readOnly: true,
+                  decoration: _buildInputDecoration(
+                      'Select your date of birth', Icons.calendar_today),
+                  onTap: () async {
+                    final DateTime? selectedDate = await showDatePicker(
                       context: context,
                       initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(2100),
+                      firstDate: DateTime(1800),
+                      lastDate: DateTime.now(),
+                      builder: (context, child) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                            colorScheme: ColorScheme.light(
+                              primary: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                          child: child!,
+                        );
+                      },
                     );
-                    setState(() {
-                      dateOfBirth.text = DateFormat('dd-MM-yyyy').format(selectedDate!);
-                    });
+                    if (selectedDate != null) {
+                      setState(() {
+                        dateOfBirth.text =
+                            DateFormat('dd-MM-yyyy').format(selectedDate);
+                      });
+                    }
                   },
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.date_range, color: Colors.white),
-                    hintText: 'Enter Date Of Birth',
-                    hintStyle: TextStyle(color: Colors.white54),
-                    contentPadding: EdgeInsets.all(10.0),
-                    filled: true,
-                    fillColor: Colors.white.withOpacity(0.2),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  style: TextStyle(fontSize: 15, color: Colors.white),
                 ),
-                SizedBox(height: 20),
-                //
-                //city
-                Text('City',style: TextStyle(color: Colors.white),),
-                SizedBox(height: 5,),
+                SizedBox(height: 24),
+
+                // City
+                _buildSectionTitle('City', Icons.location_city),
+                SizedBox(height: 16),
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white30,
-                    // border: Border.all()
-                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                    color: Colors.grey.shade50,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.grey.shade200, width: 2),
                   ),
-                  child: DropdownButton(
-                    borderRadius: BorderRadius.all(Radius.circular(12)),
-                    value: selectedCity = selectedCity ??'Rajkot',
-                    dropdownColor: Colors.black87,
-                      items: cities.map<DropdownMenuItem<String>>((String city) {
-                        return DropdownMenuItem<String>(
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      isExpanded: true,
+                      value: selectedCity = selectedCity ?? 'Rajkot',
+                      items: cities.map((String city) {
+                        return DropdownMenuItem(
                           value: city,
                           child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(city,style: TextStyle(color: Colors.white,),),
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: Text(
+                              city,
+                              style: TextStyle(
+                                color: Colors.grey.shade700,
+                                fontSize: 16,
+                              ),
+                            ),
                           ),
                         );
                       }).toList(),
-                      onChanged: (value){
+                      onChanged: (value) {
                         setState(() {
                           selectedCity = value;
                         });
                       },
+                      icon: Container(
+                        padding: EdgeInsets.all(8),
+                        margin: EdgeInsets.only(right: 8),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          Icons.arrow_drop_down,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-                SizedBox(height: 20,),
-                //
-                //Gender
-                Text('Gender',style: TextStyle(color: Colors.white),),
-                SizedBox(height: 5,),
-                SizedBox(
-                  // width: double.infinity,
+                SizedBox(height: 24),
+
+                // Gender
+                _buildSectionTitle('Gender', Icons.wc),
+                Container(
+                  margin: EdgeInsets.only(top: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade50,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.grey.shade200, width: 2),
+                  ),
                   child: Row(
                     children: [
-                      Expanded(child: RadioListTile(contentPadding: EdgeInsets.all(0),value: 'Male',title: Text('Male',style: TextStyle(color: Colors.white),), groupValue: gender, onChanged: (value){setState(() {gender = value.toString();});})),
-                      Expanded(child: RadioListTile(contentPadding: EdgeInsets.all(0),value: 'Female',title: Text('Female',style: TextStyle(color: Colors.white),), groupValue: gender, onChanged: (value){setState(() {gender = value.toString();});})),
-                    ],
-                  ),
-                ),
-
-                //
-                //Hobbies
-                Text('Hobbies',style: TextStyle(color: Colors.white),),
-                SizedBox(height: 5,),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CheckboxListTile(
-                        title: Text('Games', style: TextStyle(color: Colors.white)),
-                        value: isGames,
-                        onChanged: (value) {
-                          setState(() {
-                            isGames = value!;
-                          });
-                        },
-                        activeColor: Colors.green,
-                      ),
-                      CheckboxListTile(
-                        title: Text('Movies', style: TextStyle(color: Colors.white)),
-                        value: isMovies,
-                        onChanged: (value) {
-                          setState(() {
-                            isMovies = value!;
-                          });
-                        },
-                        activeColor: Colors.green,
-                      ),
-                      CheckboxListTile(
-                        title: Text('Music', style: TextStyle(color: Colors.white)),
-                        value: isMusic,
-                        onChanged: (value) {
-                          setState(() {
-                            isMusic = value!;
-                          });
-                        },
-                        activeColor: Colors.green,
-                      ),
-                      CheckboxListTile(
-                        title: Text('Dance', style: TextStyle(color: Colors.white)),
-                        value: isDance,
-                        onChanged: (value) {
-                          setState(() {
-                            isDance = value!;
-                          });
-                        },
-                        activeColor: Colors.green,
-                      ),
-                    ],
-                  ),
-                ),
-                //
-                //Buttons of save And Reset
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    //
-                    //save button
-                    ElevatedButton(onPressed: (){
-                      if(isDance)selectedHobbies.add('Dancing');
-                      if(isMusic)selectedHobbies.add('Listing Music');
-                      if(isMovies)selectedHobbies.add('Watching Movies');
-                      if(isGames)selectedHobbies.add('Playing Games');
-                      isValidateUser = validateInputs();
-                      if(isValidateUser){
-                        setState(() {
-                          // users.add(
-                          //   {
-                          //     'name':name.text,
-                          //     'number':number.text,
-                          //     'email':email.text,
-                          //     'gender':gender,
-                          //     'dateOfBirth':dateOfBirth.text,
-                          //     'selectedCity':selectedCity,
-                          //     "isGames" :isGames?1:0,
-                          //     "isMovies" :isMovies?1:0,
-                          //     "isMusic" :isMusic?1:0,
-                          //     "isDance" :isDance?1:0,
-                          //     'isFavourite':isFav?1:0,
-                          //   },
-                          // );
-
-                          sd.addUsers({
-                            'name':name.text,
-                            'number':number.text,
-                            'email':email.text,
-                            'gender':gender,
-                            'dateOfBirth':dateOfBirth.text,
-                            'selectedCity':selectedCity,
-                            "isGames" :isGames?1:0,
-                            "isMovies" :isMovies?1:0,
-                            "isMusic" :isMusic?1:0,
-                            "isDance" :isDance?1:0,
-                            'isFavourite':isFav?1:0,
-                          },);
-
-                          // users.add(
-                          //   {
-                          //     'name':name.text,
-                          //     'number':number.text,
-                          //     'email':email.text,
-                          //     'gender':gender,
-                          //     'dateOfBirth':dateOfBirth.text,
-                          //     'selectedCity':selectedCity,
-                          //     'selectedHobbies':selectedHobbies,
-                          //     'isFavourite':false,
-                          //   },
-                          // );
-
-
-                          clerInput();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'User Successfully Added',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              backgroundColor: Colors.green,
+                      Expanded(
+                        child: RadioListTile(
+                          title: Text(
+                            'Male',
+                            style: TextStyle(
+                              color: Colors.grey.shade700,
+                              fontWeight: FontWeight.w500,
                             ),
-                          );
+                          ),
+                          value: 'Male',
+                          groupValue: gender,
+                          onChanged: (value) {
+                            setState(() {
+                              gender = value.toString();
+                            });
+                          },
+                          activeColor: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      Expanded(
+                        child: RadioListTile(
+                          title: Text(
+                            'Female',
+                            style: TextStyle(
+                              color: Colors.grey.shade700,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          value: 'Female',
+                          groupValue: gender,
+                          onChanged: (value) {
+                            setState(() {
+                              gender = value.toString();
+                            });
+                          },
+                          activeColor: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 24),
+
+                // Hobbies
+                _buildSectionTitle('Hobbies', Icons.interests),
+                Container(
+                  margin: EdgeInsets.only(top: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade50,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.grey.shade200, width: 2),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildHobbyCheckbox('Games', isGames, (value) {
+                        setState(() => isGames = value!);
+                      }),
+                      Divider(height: 1, color: Colors.grey.shade200),
+                      _buildHobbyCheckbox('Movies', isMovies, (value) {
+                        setState(() => isMovies = value!);
+                      }),
+                      Divider(height: 1, color: Colors.grey.shade200),
+                      _buildHobbyCheckbox('Music', isMusic, (value) {
+                        setState(() => isMusic = value!);
+                      }),
+                      Divider(height: 1, color: Colors.grey.shade200),
+                      _buildHobbyCheckbox('Dance', isDance, (value) {
+                        setState(() => isDance = value!);
+                      }),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 32),
+
+                // Action Buttons
+                Row(
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          selectedHobbies.clear();
+                          if (isDance) selectedHobbies.add('Dancing');
+                          if (isMusic) selectedHobbies.add('Listing Music');
+                          if (isMovies) selectedHobbies.add('Watching Movies');
+                          if (isGames) selectedHobbies.add('Playing Games');
+
+                          isValidateUser = validateInputs();
+                          if (isValidateUser) {
+                            sd.addUsers({
+                              'name': name.text,
+                              'number': number.text,
+                              'email': email.text,
+                              'gender': gender,
+                              'dateOfBirth': dateOfBirth.text,
+                              'selectedCity': selectedCity,
+                              "isGames": isGames ? 1 : 0,
+                              "isMovies": isMovies ? 1 : 0,
+                              "isMusic": isMusic ? 1 : 0,
+                              "isDance": isDance ? 1 : 0,
+                              'isFavourite': isFav ? 1 : 0,
+                            });
+                            clerInput();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Row(
+                                  children: [
+                                    Icon(Icons.check_circle,
+                                        color: Colors.white),
+                                    SizedBox(width: 8),
+                                    Text('Profile created successfully'),
+                                  ],
+                                ),
+                                backgroundColor: Colors.green.shade400,
+                                behavior: SnackBarBehavior.floating,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                margin: EdgeInsets.all(16),
+                              ),
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Theme.of(context).primaryColor,
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.save_rounded),
+                            SizedBox(width: 8),
+                            Text(
+                              'Save Profile',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          clerInput();
                         });
-                      }
-                    }, child: Text('Save')),
-                    ElevatedButton(onPressed: (){
-                      setState(() {
-                        clerInput();
-                      });
-                    }, child: Text('Reset')),
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.grey.shade200,
+                        padding: EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 24),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: Icon(Icons.refresh_rounded,
+                          color: Colors.grey.shade700
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -409,6 +450,73 @@ class _AddPageState extends State<AddPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title, IconData icon) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 20,
+          color: Theme.of(context).primaryColor,
+        ),
+        SizedBox(width: 8),
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.grey.shade800,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFormField(
+      String label,
+      IconData icon,
+      TextEditingController controller, {
+        TextInputType? keyboardType,
+        int? maxLength,
+        FocusNode? focusNode,
+      }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextFormField(
+          controller: controller,
+          keyboardType: keyboardType,
+          maxLength: maxLength,
+          focusNode: focusNode,
+          decoration: _buildInputDecoration(label, icon),
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey.shade800,
+          ),
+        ),
+        SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget _buildHobbyCheckbox(
+      String title, bool value, void Function(bool?) onChanged) {
+    return CheckboxListTile(
+      title: Text(
+        title,
+        style: TextStyle(
+          color: Colors.grey.shade700,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      value: value,
+      onChanged: onChanged,
+      activeColor: Theme.of(context).primaryColor,
+      checkColor: Colors.white,
+      contentPadding: EdgeInsets.symmetric(horizontal: 16),
+      controlAffinity: ListTileControlAffinity.leading,
     );
   }
 }

@@ -20,13 +20,16 @@ class AboutUsPage extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 40,
-                backgroundColor: Colors.orange,
-                child: Icon(Icons.keyboard, color: Colors.white, size: 40),
+                backgroundColor: Color(0x5FB388FF),
+                child: Image.asset('assets/images/new_logo.png'),
               ),
               SizedBox(height: 10),
               Text("Notru", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               SizedBox(height: 20),
-              _buildSectionTitle("Meet Our Team"),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Meet our Team', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.purple)),
+              ),
               _buildInfoCard([
                 _buildInfoRow("Developed by", "Mann Padhiyar (23010101179)"),
                 _buildInfoRow("Mentored by", "Prof. Mehul Bhundiya (Computer Engineering Department)"),
@@ -34,7 +37,10 @@ class AboutUsPage extends StatelessWidget {
                 _buildInfoRow("Eulogized by", "Darshan University, Rajkot, Gujarat - INDIA"),
               ]),
               SizedBox(height: 20),
-              _buildSectionTitle("About ASWDC"),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text('About ASWDC', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.purple)),
+              ),
               _buildInfoCard([
                 Text(
                   "ASWDC is an Application, Software and Website Development Center @ Darshan University run by students and staff of the School of Computer Science. \n\nThe sole purpose of ASWDC is to bridge the gap between university curriculum & industry demands, enabling students to learn cutting-edge technologies, develop real-world applications, and gain professional experience under the guidance of industry experts & faculty members.",
@@ -42,7 +48,10 @@ class AboutUsPage extends StatelessWidget {
                 )
               ]),
               SizedBox(height: 20),
-              _buildSectionTitle("Contact Us"),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Contact Us', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.purple)),
+              ),
               _buildInfoCard([
                 _buildContactRow(Icons.email, "aswdc@darshan.ac.in"),
                 _buildContactRow(Icons.phone, "+91-9727747317"),
@@ -112,7 +121,6 @@ class AboutUsPage extends StatelessWidget {
         _buildIconButton(Icons.apps, "More Apps"),
         _buildIconButton(Icons.star, "Rate Us"),
         _buildIconButton(FontAwesomeIcons.facebook, "Like on Facebook"),
-        _buildIconButton(Icons.update, "Check for Updates"),
       ],
     );
   }

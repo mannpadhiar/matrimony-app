@@ -66,25 +66,20 @@ class _ListPageState extends State<ListPage> {
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        margin: EdgeInsets.all(16),
       ),
     );
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:Container(
+      body:users.isEmpty?Center(child: Container(child: Text('No Data',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.black54),),))
+          :Container(
         height: double.infinity,
         width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-          begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xadf90c71),
-              Color(0xcf9f1761),
-            ],
-          )
-        ),
+
         child:Column(
           children: [(users.isEmpty)?Padding(
             padding: const EdgeInsets.all(12.0),
@@ -245,9 +240,11 @@ class _ListPageState extends State<ListPage> {
                               },);
                             },
                             child: Card(
-                              color: Colors.white.withAlpha(90),
-                              elevation: 1,
-                              shadowColor: Colors.white,
+                              color: Colors.deepPurpleAccent.withAlpha(20),
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
                               child: SizedBox(
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -280,7 +277,7 @@ class _ListPageState extends State<ListPage> {
                                           setState(() {
 
                                           });
-                                        }, icon: Icon(users[index]['isFavourite'] == 1?Icons.favorite:Icons.favorite_outline)),
+                                        }, icon: Icon(users[index]['isFavourite'] == 1?Icons.favorite:Icons.favorite_outline,color: Colors.pink,)),
                                         //edit
                                         IconButton(onPressed: (){
                                           setState(() {
@@ -293,6 +290,7 @@ class _ListPageState extends State<ListPage> {
                                             email.text = users[index]['email'];
                                             gender = users[index]['gender'];
                                             dateOfBirth.text = users[index]['dateOfBirth'];
+                                            selectedCity = users[index]['selectedCity'];
                                           });
                                           setState(() {
                                             if(users[index]['isMovies'] == 1)isMovies = true;
@@ -549,22 +547,37 @@ class _ListPageState extends State<ListPage> {
                                               },
                                             );
                                           });
-                                        }, icon: Icon(Icons.edit)),
+                                        }, icon: Icon(Icons.edit,color: Colors.green,)),
                                         //delete
                                         IconButton(onPressed: () async{
-
-                                          await sb.deleteUsers(users[index]['id']);
-                                          setState(() {});
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                'User Deleted',
-                                                style: TextStyle(color: Colors.white),
-                                              ),
-                                              backgroundColor: Colors.red,
-                                            ),
-                                          );
-                                        }, icon: Icon(Icons.delete)),
+                                          showDialog(context: context, builder: (context) {
+                                            return AlertDialog(
+                                              title: Text('Are you sure'),
+                                              content: Text('You want to delete the data'),
+                                              actions: [
+                                                ElevatedButton(onPressed: () async{
+                                                  await sb.deleteUsers(users[index]['id']);
+                                                  setState(() {});
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                        'User Deleted',
+                                                        style: TextStyle(color: Colors.white),
+                                                      ),
+                                                      backgroundColor: Colors.red,
+                                                      behavior: SnackBarBehavior.floating,
+                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                                      margin: EdgeInsets.all(16),
+                                                    ),
+                                                  );
+                                                }, child: Text('Delete')),
+                                                ElevatedButton(onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                }, child: Text('Cancel')),
+                                              ],
+                                            );
+                                          },);
+                                        }, icon: Icon(Icons.delete_outline_outlined,color: Colors.blue,)),
                                       ],
                                     ),
                                   ],
