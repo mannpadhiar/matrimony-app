@@ -571,6 +571,7 @@ class _ListPageState extends State<ListPage> {
                                                       margin: EdgeInsets.all(16),
                                                     ),
                                                   );
+                                                  Navigator.of(context).pop();
                                                 }, child: Text('Delete')),
                                                 ElevatedButton(onPressed: () {
                                                   Navigator.of(context).pop();

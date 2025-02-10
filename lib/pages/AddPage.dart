@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/FavouritePage.dart';
@@ -174,13 +175,15 @@ class _AddPageState extends State<AddPage> {
                 // Form Fields
                 _buildSectionTitle('Personal Details', Icons.person_outline),
                 SizedBox(height: 16),
-                _buildFormField('Full Name', Icons.person, name, maxLength: 50),
+                _buildFormField('Full Name', Icons.person, name, maxLength: 50,formatters:r"[a-zA-Z]"),
                 _buildFormField('Email Address', Icons.email, email,
                     keyboardType: TextInputType.emailAddress),
                 _buildFormField('Mobile Number', Icons.phone, number,
                     keyboardType: TextInputType.number,
                     maxLength: 10,
-                    focusNode: numberFocusNode),
+                    focusNode: numberFocusNode,
+                    formatters:r"[1-9]"
+                ),
 
                 // Date of Birth Field
                 _buildSectionTitle('Date of Birth', Icons.cake_outlined),
@@ -481,6 +484,7 @@ class _AddPageState extends State<AddPage> {
         TextInputType? keyboardType,
         int? maxLength,
         FocusNode? focusNode,
+        String? formatters,
       }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -490,6 +494,9 @@ class _AddPageState extends State<AddPage> {
           keyboardType: keyboardType,
           maxLength: maxLength,
           focusNode: focusNode,
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(formatters != null ? RegExp(formatters) : RegExp(r'.*')),
+          ],
           decoration: _buildInputDecoration(label, icon),
           style: TextStyle(
             fontSize: 16,

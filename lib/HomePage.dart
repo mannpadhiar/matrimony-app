@@ -42,7 +42,7 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0x90000000),
+      backgroundColor: Color(0xFF000000),
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Text('NOTRU',style: TextStyle(color: Colors.white),),
