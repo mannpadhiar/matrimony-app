@@ -13,11 +13,13 @@ class ListPage extends StatefulWidget {
   State<ListPage> createState() => _ListPageState();
 }
 
-class _ListPageState extends State<ListPage> {
+class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin{
 
   bool isValid = false;
+
   RegExp emailValidation = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
   RegExp phoneValidation = RegExp(r'^\+?[0-9]{10,15}$');
+
   bool validateInputs() {
     if (!emailValidation.hasMatch(email.text)) {
       showError("Enter a valid Email");
@@ -52,11 +54,31 @@ class _ListPageState extends State<ListPage> {
 
   SqliteDatabase sb = SqliteDatabase();
 
+  late AnimationController _controller;
+  late Animation _sizeAnimation;
+
   @override
   void initState() {
     super.initState();
     sb.initDatabase();
+
+    //like animations
+    /*_controller = AnimationController(vsync: this,duration: Duration(milliseconds: 200));
+    _sizeAnimation = Tween(begin: 20.0,end: 30.0).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
+    _controller.addListener(() {
+      if(_controller.isCompleted){
+        _controller.reverse();
+      }
+    },);*/
   }
+
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   _controller.dispose();
+  // }
+
 
   void showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -275,10 +297,27 @@ class _ListPageState extends State<ListPage> {
                                           else{
                                             await sb.updateUserFavourite(users[index]['id'],1);
                                           }
-                                          setState(() {
+                                          setState(() {});
+                                          }, icon: Icon(users[index]['isFavourite'] == 1?Icons.favorite:Icons.favorite_outline,color: Colors.pink,size: 20,)),
 
-                                          });
-                                        }, icon: Icon(users[index]['isFavourite'] == 1?Icons.favorite:Icons.favorite_outline,color: Colors.pink,)),
+                                        //with animation
+                                        /*AnimatedBuilder(
+                                          animation: _controller,
+                                          builder: (context, child) {
+                                            return IconButton(onPressed: () async{
+                                              _controller.forward();
+                                              if(users[index]['isFavourite'] == 1){
+                                                await sb.updateUserFavourite(users[index]['id'],0);
+                                              }
+                                              else{
+                                                await sb.updateUserFavourite(users[index]['id'],1);
+                                              }
+                                              setState(() {
+
+                                              });
+                                            }, icon: Icon(users[index]['isFavourite'] == 1?Icons.favorite:Icons.favorite_outline,color: Colors.pink,size: _sizeAnimation.value,));
+                                          },
+                                        ),*/
                                         //edit
                                         IconButton(onPressed: (){
                                           setState(() {
