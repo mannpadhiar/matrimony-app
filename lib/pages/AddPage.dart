@@ -175,7 +175,7 @@ class _AddPageState extends State<AddPage> {
                 // Form Fields
                 _buildSectionTitle('Personal Details', Icons.person_outline),
                 SizedBox(height: 16),
-                _buildFormField('Full Name', Icons.person, name, maxLength: 50,formatters:r"[a-zA-Z]"),
+                _buildFormField('Full Name', Icons.person, name, maxLength: 50,formatters:r"^[a-zA-Z ]+$",isCap: true),
                 _buildFormField('Email Address', Icons.email, email,
                     keyboardType: TextInputType.emailAddress),
                 _buildFormField('Mobile Number', Icons.phone, number,
@@ -372,7 +372,7 @@ class _AddPageState extends State<AddPage> {
                             sd.addUsers({
                               'name': name.text,
                               'number': number.text,
-                              'email': email.text,
+                              'email': email.text.toLowerCase(),
                               'gender': gender,
                               'dateOfBirth': dateOfBirth.text,
                               'selectedCity': selectedCity,
@@ -393,7 +393,7 @@ class _AddPageState extends State<AddPage> {
                                     Text('Profile created successfully'),
                                   ],
                                 ),
-                                backgroundColor: Colors.green.shade400,
+                                backgroundColor: Colors.green.shade500,
                                 behavior: SnackBarBehavior.floating,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)),
@@ -485,6 +485,7 @@ class _AddPageState extends State<AddPage> {
         int? maxLength,
         FocusNode? focusNode,
         String? formatters,
+        bool? isCap,
       }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -494,6 +495,7 @@ class _AddPageState extends State<AddPage> {
           keyboardType: keyboardType,
           maxLength: maxLength,
           focusNode: focusNode,
+          textCapitalization: isCap != null? TextCapitalization.words:TextCapitalization.none,
           inputFormatters: [
             FilteringTextInputFormatter.allow(formatters != null ? RegExp(formatters) : RegExp(r'.*')),
           ],

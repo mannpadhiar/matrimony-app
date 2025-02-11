@@ -208,10 +208,11 @@ Future<void> showBottomSheetList(BuildContext context, Map<String, dynamic> user
             // User Details
             Row(
               children: [
-                Text(
-                  'Name:',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
-                ),
+                Icon(Icons.person,size: 22,color: Colors.black87,),
+                // Text(
+                //   'Name:',
+                //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                // ),
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -225,10 +226,11 @@ Future<void> showBottomSheetList(BuildContext context, Map<String, dynamic> user
             SizedBox(height: 8),
             Row(
               children: [
-                Text(
-                  'Number:',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
-                ),
+                Icon(Icons.phone,size: 22,color: Colors.black87,),
+                // Text(
+                //   'Number:',
+                //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                // ),
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -242,10 +244,11 @@ Future<void> showBottomSheetList(BuildContext context, Map<String, dynamic> user
             SizedBox(height: 8),
             Row(
               children: [
-                Text(
-                  'E-mail:',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
-                ),
+                Icon(Icons.mail,size: 22,color: Colors.black87,),
+                // Text(
+                //   'E-mail:',
+                //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                // ),
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -259,10 +262,11 @@ Future<void> showBottomSheetList(BuildContext context, Map<String, dynamic> user
             SizedBox(height: 8),
             Row(
               children: [
-                Text(
-                  'Date of Birth:',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
-                ),
+                Icon(Icons.date_range,size: 22,color: Colors.black87,),
+                // Text(
+                //   'Date of Birth:',
+                //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                // ),
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -276,10 +280,11 @@ Future<void> showBottomSheetList(BuildContext context, Map<String, dynamic> user
             SizedBox(height: 8),
             Row(
               children: [
-                Text(
-                  'City:',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
-                ),
+                Icon(Icons.location_city,size: 22,color: Colors.black87,),
+                // Text(
+                //   'City:',
+                //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                // ),
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
@@ -293,6 +298,7 @@ Future<void> showBottomSheetList(BuildContext context, Map<String, dynamic> user
             SizedBox(height: 8),
             Row(
               children: [
+                Icon(user['gender'] == 'Male'?Icons.male : Icons.female,size: 22,color: Colors.black87,),
                 Text(
                   'Gender:',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
