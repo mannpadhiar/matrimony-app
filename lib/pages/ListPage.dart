@@ -54,14 +54,27 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
 
   SqliteDatabase sb = SqliteDatabase();
 
-  late AnimationController _controller;
-  late Animation _sizeAnimation;
+  // late AnimationController _controller;
+  // late Animation _sizeAnimation;
+
+  var _controllers = {};
+  var _animations = {};
   @override
   void initState() {
     super.initState();
     sb.initDatabase();
 
     //like animations
+    // for(int i=0;i<users.length;i++){
+    //   _controllers[i] = AnimationController(vsync: this,duration: Duration(milliseconds: 200));
+    //   _animations[i] = Tween(begin: 20.0,end: 30.0).animate(_controllers[i]);
+    //
+    //   _controllers[i].addListener((){
+    //     if(_controllers[i].isCompleted){
+    //       _controllers[i].reverse();
+    //     }
+    //   });
+    // }
     // _controller = AnimationController(vsync: this,duration: Duration(milliseconds: 200));
     // _sizeAnimation = Tween(begin: 20.0,end: 30.0).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
     //
@@ -70,13 +83,14 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
     //     _controller.reverse();
     //   }
     // },);
+
   }
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   _controller.dispose();
-  // }
+  @override
+  void dispose() {
+    super.dispose();
+    _controllers.forEach((_, controller) => controller.dispose());
+  }
 
   void showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -154,7 +168,7 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                         itemBuilder: (context, index) {
                           bool isVisible = true;
                           if(search != null){
-                            isVisible = users[index]['name'].toLowerCase().contains(search!.toLowerCase());
+                            isVisible = users[index]['name'].toLowerCase().contains(search!.toLowerCase()) || users[index]['selectedCity'].toLowerCase().contains(search!.toLowerCase());
                           }
                           return isVisible?InkWell(
                             onTap: (){
@@ -307,10 +321,10 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
 
                                         //with animation
                                         // AnimatedBuilder(
-                                        //   animation: _controller,
+                                        //   animation: _controllers[index],
                                         //   builder: (context, child) {
                                         //     return IconButton(onPressed: () async{
-                                        //       _controller.forward();
+                                        //       _controllers[index].forward();
                                         //       if(users[index]['isFavourite'] == 1){
                                         //         await sb.updateUserFavourite(users[index]['id'],0);
                                         //       }
@@ -318,7 +332,7 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                         //         await sb.updateUserFavourite(users[index]['id'],1);
                                         //       }
                                         //       setState(() {});
-                                        //     }, icon: Icon(users[index]['isFavourite'] == 1?Icons.favorite:Icons.favorite_outline,color: Colors.pink,size: _sizeAnimation.value,));
+                                        //     }, icon: Icon(users[index]['isFavourite'] == 1?Icons.favorite:Icons.favorite_outline,color: Colors.pink,size: _animations[index].value,));
                                         //   },
                                         // ),
                                         //edit

@@ -299,10 +299,6 @@ Future<void> showBottomSheetList(BuildContext context, Map<String, dynamic> user
             Row(
               children: [
                 Icon(user['gender'] == 'Male'?Icons.male : Icons.female,size: 22,color: Colors.black87,),
-                Text(
-                  'Gender:',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
-                ),
                 SizedBox(width: 8),
                 Expanded(
                   child: Text(
