@@ -56,21 +56,20 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
 
   late AnimationController _controller;
   late Animation _sizeAnimation;
-
   @override
   void initState() {
     super.initState();
     sb.initDatabase();
 
     //like animations
-    /*_controller = AnimationController(vsync: this,duration: Duration(milliseconds: 200));
-    _sizeAnimation = Tween(begin: 20.0,end: 30.0).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
-
-    _controller.addListener(() {
-      if(_controller.isCompleted){
-        _controller.reverse();
-      }
-    },);*/
+    // _controller = AnimationController(vsync: this,duration: Duration(milliseconds: 200));
+    // _sizeAnimation = Tween(begin: 20.0,end: 30.0).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+    //
+    // _controller.addListener(() {
+    //   if(_controller.isCompleted){
+    //     _controller.reverse();
+    //   }
+    // },);
   }
 
   // @override
@@ -78,7 +77,6 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
   //   super.dispose();
   //   _controller.dispose();
   // }
-
 
   void showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -279,9 +277,15 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                       //name
                                       child: Row(
                                         children: [
-                                          Icon(Icons.person),
+                                          Icon(Icons.person,size: 28,),
                                           SizedBox(width: 8),
-                                          Text(users[index]['name'].length > 20? users[index]['name'].toString().substring(0,15) + '...' : users[index]['name']),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(users[index]['name'].length > 20? users[index]['name'].toString().substring(0,15) + '...' : users[index]['name'],style:TextStyle(fontSize: 15),),
+                                              Text(users[index]['selectedCity'],style:TextStyle(fontSize: 12,color: Colors.grey),),
+                                            ],
+                                          )
                                         ],
                                       ),
                                     ),
@@ -289,7 +293,7 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        //favourite
+                                        // favourite
                                         IconButton(onPressed: () async{
                                           if(users[index]['isFavourite'] == 1){
                                             await sb.updateUserFavourite(users[index]['id'],0);
@@ -298,26 +302,25 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                             await sb.updateUserFavourite(users[index]['id'],1);
                                           }
                                           setState(() {});
-                                          }, icon: Icon(users[index]['isFavourite'] == 1?Icons.favorite:Icons.favorite_outline,color: Colors.pink,size: 20,)),
+                                          }, icon: Icon(users[index]['isFavourite'] == 1?Icons.favorite:Icons.favorite_outline,color: Colors.pink,size: 20,),
+                                        ),
 
                                         //with animation
-                                        /*AnimatedBuilder(
-                                          animation: _controller,
-                                          builder: (context, child) {
-                                            return IconButton(onPressed: () async{
-                                              _controller.forward();
-                                              if(users[index]['isFavourite'] == 1){
-                                                await sb.updateUserFavourite(users[index]['id'],0);
-                                              }
-                                              else{
-                                                await sb.updateUserFavourite(users[index]['id'],1);
-                                              }
-                                              setState(() {
-
-                                              });
-                                            }, icon: Icon(users[index]['isFavourite'] == 1?Icons.favorite:Icons.favorite_outline,color: Colors.pink,size: _sizeAnimation.value,));
-                                          },
-                                        ),*/
+                                        // AnimatedBuilder(
+                                        //   animation: _controller,
+                                        //   builder: (context, child) {
+                                        //     return IconButton(onPressed: () async{
+                                        //       _controller.forward();
+                                        //       if(users[index]['isFavourite'] == 1){
+                                        //         await sb.updateUserFavourite(users[index]['id'],0);
+                                        //       }
+                                        //       else{
+                                        //         await sb.updateUserFavourite(users[index]['id'],1);
+                                        //       }
+                                        //       setState(() {});
+                                        //     }, icon: Icon(users[index]['isFavourite'] == 1?Icons.favorite:Icons.favorite_outline,color: Colors.pink,size: _sizeAnimation.value,));
+                                        //   },
+                                        // ),
                                         //edit
                                         IconButton(onPressed: (){
                                           setState(() {

@@ -48,7 +48,7 @@ class _HomepageState extends State<Homepage> {
         title: Text('NOTRU',style: TextStyle(color: Colors.white),),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
-            bottom: Radius.circular(18), // Adjust the bottom border radius
+            bottom: Radius.circular(18),
           ),
         ),
       ),
