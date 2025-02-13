@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:untitled/pages/main_animation_page.dart';
 import '../FavouritePage.dart';
 import '../providers/user_provider.dart';
 import 'package:intl/intl.dart';
@@ -49,7 +50,10 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
 
   void updateUserFun(int id,Map<String, dynamic> tUser) async{
     await sb.updateUsers(id, tUser);
-    setState(() {});
+    setState(() {
+      sortedUser = List.from(users);
+      sortUserArray(selectedFilter);
+    });
   }
 
   SqliteDatabase sb = SqliteDatabase();
@@ -64,8 +68,10 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
     super.initState();
     sb.initDatabase();
 
+    sortedUser = List.from(users);
+    // sortedUser.sort((a, b) => a['name'].compareTo(b['name']),);
     //like animations
-    // for(int i=0;i<users.length;i++){
+    // for(int i=0;i<sortedUser.length;i++){
     //   _controllers[i] = AnimationController(vsync: this,duration: Duration(milliseconds: 200));
     //   _animations[i] = Tween(begin: 20.0,end: 30.0).animate(_controllers[i]);
     //
@@ -106,16 +112,63 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
       ),
     );
   }
+
+  Widget showSortDropdownButton(context){
+    return StatefulBuilder(
+      builder: (context, setState) => DropdownButtonHideUnderline(
+        child: DropdownButton(
+          // icon: Icon(Icons.ac_unit),
+          value: selectedFilter,
+          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 0),
+          borderRadius: BorderRadius.circular(12),
+          items: [
+            DropdownMenuItem(child: Text('Name(a-z)',style: TextStyle(color: Colors.black87),),value: 'Name(a-z)',),
+            DropdownMenuItem(child: Text('Name(z-a)',style: TextStyle(color: Colors.black87),),value: 'Name(z-a)',),
+            DropdownMenuItem(child: Text('City(a-z)',style: TextStyle(color: Colors.black87),),value: 'City(a-z)',),
+            DropdownMenuItem(child: Text('City(z-a)',style: TextStyle(color: Colors.black87),),value: 'City(z-a)',),
+          ],
+          onChanged: (value) {
+            sortUserArray(value!);
+          },),
+      ),
+    );
+  }
+
+  void sortUserArray(String sortString){
+    
+    setState(() {
+      selectedFilter = sortString;
+      sortedUser = List.from(sortedUser);
+
+      if (selectedFilter == 'Name(a-z)') {
+        sortedUser.sort((a, b) => a['name'].compareTo(b['name']));
+      }
+      if (selectedFilter == 'Name(z-a)') {
+        sortedUser.sort((a, b) => b['name'].compareTo(a['name']));
+      }
+      if (selectedFilter == 'City(a-z)') {
+        sortedUser.sort((a, b) => a['selectedCity'].compareTo(b['selectedCity']));
+      }
+      if (selectedFilter == 'City(z-a)') {
+        sortedUser.sort((a, b) => b['selectedCity'].compareTo(a['selectedCity']));
+      }
+    });
+    print(sortedUser);
+  }
   @override
   Widget build(BuildContext context) {
+
+      sortedUser = sortedUser.toList();
+    // sortedUser.sort((a, b) => a['name'].compareTo(b['name']),);
+
     return Scaffold(
-      body:users.isEmpty?Center(child: Container(child: Text('No Data',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.black54),),))
+      body:sortedUser.isEmpty?Center(child: Container(child: Text('No Data',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold,color: Colors.black54),),))
           :Container(
         height: double.infinity,
         width: double.infinity,
 
         child:Column(
-          children: [(users.isEmpty)?Padding(
+          children: [(sortedUser.isEmpty)?Padding(
             padding: const EdgeInsets.all(12.0),
             child: Container(
                   height: 40,
@@ -131,6 +184,7 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
             child:Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //
                   // search
@@ -158,21 +212,39 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                   ),
                   SizedBox(height: 10,),
 
+                  Container(
+                    padding: EdgeInsets.all(2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.filter_alt),
+                        Text('Sort By :'),
+                        SizedBox(width: 10,),
+                        Container(child: showSortDropdownButton(context),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Color(0x99b496ea),
+                        ),),
+                      ],
+                    )
+                  ),
+
                   //
-                  //list of the users
+                  //list of the sortedUser
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: ListView.builder(
-                        itemCount: users.length,
+                        itemCount: sortedUser.length,
                         itemBuilder: (context, index) {
+
                           bool isVisible = true;
                           if(search != null){
-                            isVisible = users[index]['name'].toLowerCase().contains(search!.toLowerCase()) || users[index]['selectedCity'].toLowerCase().contains(search!.toLowerCase());
+                            isVisible = sortedUser[index]['name'].toLowerCase().contains(search!.toLowerCase()) || sortedUser[index]['selectedCity'].toLowerCase().contains(search!.toLowerCase());
                           }
                           return isVisible?InkWell(
                             onTap: (){
-                              showBottomSheetList(context,users[index]);
+                              showBottomSheetList(context,sortedUser[index]);
                               // showDialog(context: context, builder: (BuildContext context) {
                               //   return AlertDialog(
                               //     title: Text('Details'),
@@ -190,7 +262,7 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                               //               children: [
                               //                 Icon(Icons.person),
                               //                 SizedBox(width: 8),
-                              //                 Expanded(child: Text(users[index]['name'],softWrap: true,)),
+                              //                 Expanded(child: Text(sortedUser[index]['name'],softWrap: true,)),
                               //               ],
                               //             ),
                               //           ),
@@ -203,7 +275,7 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                               //               children: [
                               //                 Icon(Icons.mail),
                               //                 SizedBox(width: 8),
-                              //                 Text(users[index]['email']),
+                              //                 Text(sortedUser[index]['email']),
                               //               ],
                               //             ),
                               //           ),
@@ -215,7 +287,7 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                               //               children: [
                               //                 Icon(Icons.phone),
                               //                 SizedBox(width: 8),
-                              //                 Text(users[index]['number'])
+                              //                 Text(sortedUser[index]['number'])
                               //               ],
                               //             ),
                               //           ),
@@ -228,7 +300,7 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                               //               children: [
                               //                 Icon(Icons.location_city),
                               //                 SizedBox(width: 8),
-                              //                 Text(users[index]['selectedCity'])
+                              //                 Text(sortedUser[index]['selectedCity'])
                               //               ],
                               //             ),
                               //           ),
@@ -240,7 +312,7 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                               //               children: [
                               //                 Icon(Icons.date_range),
                               //                 SizedBox(width: 8),
-                              //                 Text(users[index]['dateOfBirth'])
+                              //                 Text(sortedUser[index]['dateOfBirth'])
                               //               ],
                               //             ),
                               //           ),
@@ -252,7 +324,7 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                               //               children: [
                               //                 Icon(Icons.numbers),
                               //                 SizedBox(width: 8),
-                              //                 Text(((int.parse(DateTime.now().year.toString()) - int.parse(users[index]['dateOfBirth'].toString().substring(6,10)))).toString()),
+                              //                 Text(((int.parse(DateTime.now().year.toString()) - int.parse(sortedUser[index]['dateOfBirth'].toString().substring(6,10)))).toString()),
                               //               ],
                               //             ),
                               //           ),
@@ -262,9 +334,9 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                               //             padding: const EdgeInsets.all(8.0),
                               //             child: Row(
                               //               children: [
-                              //                 Icon((users[index]['gender'] == 'Male')?(Icons.male):(Icons.female) ),
+                              //                 Icon((sortedUser[index]['gender'] == 'Male')?(Icons.male):(Icons.female) ),
                               //                 SizedBox(width: 8),
-                              //                 Text(users[index]['gender']),
+                              //                 Text(sortedUser[index]['gender']),
                               //               ],
                               //             ),
                               //           ),
@@ -296,8 +368,8 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text(users[index]['name'].length > 20? users[index]['name'].toString().substring(0,15) + '...' : users[index]['name'],style:TextStyle(fontSize: 15),),
-                                              Text(users[index]['selectedCity'],style:TextStyle(fontSize: 12,color: Colors.grey),),
+                                              Text(sortedUser[index]['name'].length > 20? sortedUser[index]['name'].toString().substring(0,15) + '...' : sortedUser[index]['name'],style:TextStyle(fontSize: 15),),
+                                              Text(sortedUser[index]['selectedCity'],style:TextStyle(fontSize: 12,color: Colors.grey),),
                                             ],
                                           )
                                         ],
@@ -309,14 +381,17 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                       children: [
                                         // favourite
                                         IconButton(onPressed: () async{
-                                          if(users[index]['isFavourite'] == 1){
-                                            await sb.updateUserFavourite(users[index]['id'],0);
+                                          if(sortedUser[index]['isFavourite'] == 1){
+                                            await sb.updateUserFavourite(sortedUser[index]['id'],0);
                                           }
                                           else{
-                                            await sb.updateUserFavourite(users[index]['id'],1);
+                                            await sb.updateUserFavourite(sortedUser[index]['id'],1);
                                           }
-                                          setState(() {});
-                                          }, icon: Icon(users[index]['isFavourite'] == 1?Icons.favorite:Icons.favorite_outline,color: Colors.pink,size: 20,),
+                                          setState(() {
+                                            sortedUser = List.from(users);
+                                            sortUserArray(selectedFilter);
+                                          });
+                                          }, icon: Icon(sortedUser[index]['isFavourite'] == 1?Icons.favorite:Icons.favorite_outline,color: Colors.pink,size: 20,),
                                         ),
 
                                         //with animation
@@ -325,14 +400,14 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                         //   builder: (context, child) {
                                         //     return IconButton(onPressed: () async{
                                         //       _controllers[index].forward();
-                                        //       if(users[index]['isFavourite'] == 1){
-                                        //         await sb.updateUserFavourite(users[index]['id'],0);
+                                        //       if(sortedUser[index]['isFavourite'] == 1){
+                                        //         await sb.updateUserFavourite(sortedUser[index]['id'],0);
                                         //       }
                                         //       else{
-                                        //         await sb.updateUserFavourite(users[index]['id'],1);
+                                        //         await sb.updateUserFavourite(sortedUser[index]['id'],1);
                                         //       }
                                         //       setState(() {});
-                                        //     }, icon: Icon(users[index]['isFavourite'] == 1?Icons.favorite:Icons.favorite_outline,color: Colors.pink,size: _animations[index].value,));
+                                        //     }, icon: Icon(sortedUser[index]['isFavourite'] == 1?Icons.favorite:Icons.favorite_outline,color: Colors.pink,size: _animations[index].value,));
                                         //   },
                                         // ),
                                         //edit
@@ -342,18 +417,18 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                             // user['name'] == userToRemove['name'] &&
                                             //     user['email'] == userToRemove['email']
                                             // );
-                                            name.text = users[index]['name'];
-                                            number.text = users[index]['number'];
-                                            email.text = users[index]['email'];
-                                            gender = users[index]['gender'];
-                                            dateOfBirth.text = users[index]['dateOfBirth'];
-                                            selectedCity = users[index]['selectedCity'];
+                                            name.text = sortedUser[index]['name'];
+                                            number.text = sortedUser[index]['number'];
+                                            email.text = sortedUser[index]['email'];
+                                            gender = sortedUser[index]['gender'];
+                                            dateOfBirth.text = sortedUser[index]['dateOfBirth'];
+                                            selectedCity = sortedUser[index]['selectedCity'];
                                           });
                                           setState(() {
-                                            if(users[index]['isMovies'] == 1)isMovies = true;
-                                            if(users[index]['isDance'] == 1)isDance = true;
-                                            if(users[index]['isDance'] == 1)isGames = true;
-                                            if(users[index]['isMusic'] == 1)isMusic = true;
+                                            if(sortedUser[index]['isMovies'] == 1)isMovies = true;
+                                            if(sortedUser[index]['isDance'] == 1)isDance = true;
+                                            if(sortedUser[index]['isDance'] == 1)isGames = true;
+                                            if(sortedUser[index]['isMusic'] == 1)isMusic = true;
                                           });
 
                                           showDialog(context: context, builder: (BuildContext context){
@@ -575,7 +650,7 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                                       });
                                                       if(validateInputs()){
                                                         setState(() {
-                                                          Map<String, dynamic> updatedUsers = {
+                                                          Map<String, dynamic> updatedsortedUser = {
                                                             'name': name.text,
                                                             'number': number.text,
                                                             'email': email.text,
@@ -586,9 +661,9 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                                             'isMusic': isMusic?1:0,
                                                             'isMovies': isMovies?1:0,
                                                             'isGames': isGames?1:0,
-                                                            'isFavourite':users[index]['isFavourite'],
+                                                            'isFavourite':sortedUser[index]['isFavourite'],
                                                           };
-                                                          updateUserFun(users[index]['id'],updatedUsers);
+                                                          updateUserFun(sortedUser[index]['id'],updatedsortedUser);
                                                         });
 
                                                         clerInput();
@@ -613,7 +688,7 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                               content: Text('You want to delete the data'),
                                               actions: [
                                                 ElevatedButton(onPressed: () async{
-                                                  await sb.deleteUsers(users[index]['id']);
+                                                  await sb.deleteUsers(sortedUser[index]['id']);
                                                   setState(() {});
                                                   ScaffoldMessenger.of(context).showSnackBar(
                                                     SnackBar(

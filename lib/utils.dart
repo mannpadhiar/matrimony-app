@@ -37,7 +37,7 @@ List<Map<String, dynamic>> users = [
 int currentIndex = 0;
 
 List<Map<String, dynamic>> favouriteUser = [];
-
+List<Map<String,dynamic>> sortedUser = [];
 TextEditingController name = TextEditingController();
 TextEditingController email = TextEditingController();
 TextEditingController number = TextEditingController();
@@ -80,6 +80,8 @@ List<String> cities = [
   "Surendranagar",
   "Valsad",
 ];
+
+String selectedFilter = "Name(a-z)";
 
 void clerInput(){
   name..clear();
