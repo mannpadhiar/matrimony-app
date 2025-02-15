@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:untitled/HomePage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/pages/login_page.dart';
 
 class MainAnimationPage extends StatefulWidget {
   const MainAnimationPage({super.key});
@@ -47,9 +49,19 @@ class _MainAnimationPageState extends State<MainAnimationPage> with SingleTicker
       ),
     );
 
-    Timer(Duration(seconds: 3),() {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Homepage(),));
+    Timer(Duration(seconds: 3),() async{
+      if(await isLogIn()){
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Homepage(),));
+      }else{
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage(),));
+      }
     },);
+  }
+
+  Future<bool> isLogIn() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isLog =  prefs.getBool('isLogin') ?? false;
+    return isLog;
   }
 
   @override

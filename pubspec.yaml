@@ -54,6 +54,7 @@ dev_dependencies:
   intl: ^0.18.1
   about: ^2.2.0
   aswdc_flutter_pub: ^1.0.27
+  shared_preferences: ^2.5.2
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

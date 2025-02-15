@@ -8,11 +8,13 @@ import 'package:untitled/SignInPage.dart';
 import 'package:untitled/pages/AddPage.dart';
 import 'package:untitled/pages/ListPage.dart';
 import 'package:untitled/pages/aboutUs.dart';
+import 'package:untitled/pages/login_page.dart';
 import 'package:untitled/pages/main_animation_page.dart';
 import 'package:untitled/temp.dart';
 import 'package:untitled/tempLogin.dart';
 import 'package:untitled/temppage.dart';
 import 'FavouritePage.dart';
+import 'LoginPage.dart';
 import 'newPages/NewAddPage.dart';
 import 'newPages/NewLikePage.dart';
 import 'newPages/NewListPage.dart';
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:MainAnimationPage(),
+      home: MainAnimationPage(),
       // StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(),
       //   builder: (context, snapshot){
       //     if(snapshot.connectionState == ConnectionState.waiting){
