@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/HomePage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -18,6 +19,7 @@ class _LoginPageState extends State<LoginPage> {
     await prefs.setBool("isLogin", true);
     await prefs.setString("email", _name.text);
     print(await prefs.getBool('isLogin'));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Homepage(),));
   }
 
   bool isObscureText = true;
@@ -48,9 +50,10 @@ class _LoginPageState extends State<LoginPage> {
                     //username
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4,horizontal: 6),
-                      child: Text("Name",style: TextStyle(fontWeight: FontWeight.w500),),
+                      child: Text("E-mail",style: TextStyle(fontWeight: FontWeight.w500),),
                     ),
                     TextField(
+                      keyboardType: TextInputType.emailAddress,
                       controller: _name,
                       decoration: InputDecoration(
                         hintText: 'Enter your Username',
