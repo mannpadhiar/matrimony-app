@@ -436,6 +436,7 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                             return StatefulBuilder(
                                               builder: (context, setState) {
                                                 return AlertDialog(
+                                                  contentPadding: EdgeInsets.all(30),
                                                   backgroundColor: Colors.black87,
                                                   title: Text('Update User',style: TextStyle(color: Colors.white70),),
                                                   content: SingleChildScrollView(
