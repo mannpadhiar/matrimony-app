@@ -7,9 +7,12 @@ import 'package:untitled/pages/ListPage.dart';
 import 'package:flutter/material.dart';
 import 'package:about/about.dart';
 import 'package:untitled/pages/aboutUs.dart';
+import 'package:untitled/pages/login_page.dart';
 import 'package:untitled/utils.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -39,11 +42,37 @@ class _HomepageState extends State<Homepage> {
     return false;
   }
 
+  void logOutUser() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('isLogin');
+    await prefs.remove('email');
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage(),));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF000000),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(onPressed: () {
+            showDialog(context: context, builder: (context) {
+              return AlertDialog(
+                title: Text('Logout'),
+                content: Text('are you sure you want to Log Out'),
+                actions: [
+                  ElevatedButton(onPressed: () {
+                    logOutUser();
+                  }, child: Text('LogOut')),
+                  ElevatedButton(onPressed: () {
+                    Navigator.of(context).pop();
+                  }, child: Text('Cancel')),
+                ],
+              );
+            },);
+          }, icon: Icon(Icons.logout,color: Colors.white,))
+        ],
         backgroundColor: Theme.of(context).primaryColor,
         title: Text('NOTRU',style: TextStyle(color: Colors.white),),
         shape: RoundedRectangleBorder(

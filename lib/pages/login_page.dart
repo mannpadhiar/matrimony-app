@@ -14,11 +14,39 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _password = TextEditingController();
 
+  RegExp emailValidation = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+  RegExp passwordValidation = RegExp(r'^(?=.*[@#$%^&+=!]).{8,}$');
+
+  bool validateInputs(){
+    if(!emailValidation.hasMatch(_name.text)){
+      showError('Enter valid e-mail');
+      return false;
+    }
+    if(!passwordValidation.hasMatch(_password.text)){
+      showError('Enter valid password');
+      return false;
+    }
+    return true;
+  }
+  void showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(fontWeight: FontWeight.w500),
+        ),
+        backgroundColor: Colors.red.shade400,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        margin: EdgeInsets.all(16),
+      ),
+    );
+  }
+
   void loginUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool("isLogin", true);
     await prefs.setString("email", _name.text);
-    print(await prefs.getBool('isLogin'));
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Homepage(),));
   }
 
@@ -142,8 +170,9 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         onPressed: () {
-                          print('Button is pressed');
-                          loginUser();
+                          if(validateInputs()){
+                            loginUser();
+                          }
                         },
                         child: Text('Log In',style: TextStyle(color: Colors.white,fontSize: 18),),
                       ),
