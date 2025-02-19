@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/HomePage.dart';
 
@@ -16,6 +18,32 @@ class _LoginPageState extends State<LoginPage> {
 
   RegExp emailValidation = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
   RegExp passwordValidation = RegExp(r'^(?=.*[@#$%^&+=!]).{8,}$');
+
+  //fire base login with google
+  final _auth = FirebaseAuth.instance;
+
+  Future<UserCredential?> loginWithGoogle()async{
+    try{
+      final googleUser = await GoogleSignIn().signIn();
+      final googleAuth = await googleUser?.authentication;
+
+      final cred = GoogleAuthProvider.credential(idToken: googleAuth?.idToken,accessToken: googleAuth?.accessToken);
+      return await _auth.signInWithCredential(cred);
+    }catch(e){
+      print(e.toString());
+    }
+    return null;
+  }
+
+  Future<void> logOutWithGoogle() async{
+    try{
+      await GoogleSignIn().signOut();
+      FirebaseAuth.instance.signOut();
+    }
+    catch(e){
+      print(e.toString());
+    }
+  }
 
   bool validateInputs(){
     if(!emailValidation.hasMatch(_name.text)){
@@ -160,6 +188,31 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SizedBox(height: 20,),
 
+                    //
+                    //login with google button
+                    ElevatedButton(
+                      onPressed: () async {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => Center(child: CircularProgressIndicator()),
+                        );
+
+                        UserCredential? userCredential = await loginWithGoogle();
+
+                        Navigator.pop(context);
+
+                        if (userCredential != null) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => Homepage()),
+                          );
+                        } else {
+                          showError('Failed to login with Google');
+                        }
+                      },
+                      child: Text('Sign in with Google'),
+                    ),
                     //Login Button
                     Center(
                       child: ElevatedButton(

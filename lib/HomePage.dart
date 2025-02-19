@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:untitled/FavouritePage.dart';
 import 'package:untitled/pages/AddPage.dart';
 import 'package:untitled/pages/AddPageMain.dart';
 import 'package:untitled/pages/ListPage.dart';
+import 'package:untitled/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:about/about.dart';
 import 'package:untitled/pages/aboutUs.dart';
@@ -49,6 +51,16 @@ class _HomepageState extends State<Homepage> {
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage(),));
   }
 
+  Future<void> logOutWithGoogle() async{
+    try{
+      await GoogleSignIn().signOut();
+      FirebaseAuth.instance.signOut();
+    }
+    catch(e){
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,6 +76,7 @@ class _HomepageState extends State<Homepage> {
                 actions: [
                   ElevatedButton(onPressed: () {
                     logOutUser();
+                    logOutWithGoogle();
                   }, child: Text('LogOut')),
                   ElevatedButton(onPressed: () {
                     Navigator.of(context).pop();
