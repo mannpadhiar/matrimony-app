@@ -36,6 +36,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        pageTransitionsTheme: PageTransitionsTheme(
+        builders: Map<TargetPlatform, PageTransitionsBuilder>.fromIterable(
+        TargetPlatform.values,
+        value: (_) => const FadeUpwardsPageTransitionsBuilder(),),
+        ),
+      ),
       home: MainAnimationPage(),
       // StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(),
       //   builder: (context, snapshot){
