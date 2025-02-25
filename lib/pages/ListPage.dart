@@ -61,15 +61,16 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
   // late AnimationController _controller;
   // late Animation _sizeAnimation;
 
-  var _controllers = {};
-  var _animations = {};
+  // var _controllers = {};
+  // var _animations = {};
   @override
   void initState() {
     super.initState();
     sb.initDatabase();
 
     sortedUser = List.from(users);
-    // sortedUser.sort((a, b) => a['name'].compareTo(b['name']),);
+    sortUserArray(selectedFilter);
+
     //like animations
     // for(int i=0;i<sortedUser.length;i++){
     //   _controllers[i] = AnimationController(vsync: this,duration: Duration(milliseconds: 200));
@@ -92,11 +93,11 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
 
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _controllers.forEach((_, controller) => controller.dispose());
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   _controllers.forEach((_, controller) => controller.dispose());
+  // }
 
   void showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -135,7 +136,6 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
   }
 
   void sortUserArray(String sortString){
-    
     setState(() {
       selectedFilter = sortString;
       sortedUser = List.from(sortedUser);
@@ -153,7 +153,6 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
         sortedUser.sort((a, b) => b['selectedCity'].compareTo(a['selectedCity']));
       }
     });
-    print(sortedUser);
   }
   @override
   Widget build(BuildContext context) {
@@ -431,255 +430,302 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                             if(sortedUser[index]['isMusic'] == 1)isMusic = true;
                                           });
 
-                                          showDialog(context: context, builder: (BuildContext context){
-                                            String tempGender = gender!;
-                                            return StatefulBuilder(
-                                              builder: (context, setState) {
-                                                return AlertDialog(
-                                                  contentPadding: EdgeInsets.all(30),
-                                                  backgroundColor: Colors.black87,
-                                                  title: Text('Update User',style: TextStyle(color: Colors.white70),),
-                                                  content: SingleChildScrollView(
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        //
-                                                        //name
-                                                        Text('name',style: TextStyle(color: Colors.white),),
-                                                        SizedBox(height: 5,),
-                                                        TextFormField(
-                                                          maxLength: 50,
-                                                          controller: name,
-                                                          decoration: InputDecoration(
-                                                            prefixIcon: Icon(Icons.drive_file_rename_outline, color: Colors.white),
-                                                            hintText: 'Enter your Name',
-                                                            hintStyle: TextStyle(color: Colors.white54),
-                                                            contentPadding: EdgeInsets.all(10.0),
-                                                            filled: true,
-                                                            counterStyle: TextStyle(color: Colors.white),
-                                                            fillColor: Colors.white30,
-                                                            border: OutlineInputBorder(
-                                                              borderRadius: BorderRadius.all(Radius.circular(12)),
-                                                              borderSide: BorderSide.none,
-                                                            ),
-                                                          ),
-                                                          style: TextStyle(fontSize: 15, color: Colors.white,),
-                                                        ),
-                                                        //
-                                                        //Email Address
-                                                        Text('E-mail',style: TextStyle(color: Colors.white),),
-                                                        SizedBox(height: 5,),
-                                                        TextFormField(
-                                                          controller: email,
-                                                          decoration: InputDecoration(
-                                                            prefixIcon: Icon(Icons.email, color: Colors.white),
-                                                            hintText: 'Enter your E-mail',
-                                                            hintStyle: TextStyle(color: Colors.white54),
-                                                            contentPadding: EdgeInsets.all(10.0),
-                                                            filled: true,
-                                                            fillColor: Colors.white30,
-                                                            border: OutlineInputBorder(
-                                                              borderRadius: BorderRadius.all(Radius.circular(12)),
-                                                              borderSide: BorderSide.none,
-                                                            ),
-                                                          ),
-                                                          style: TextStyle(fontSize: 15, color: Colors.white),
-                                                        ),
-                                                        SizedBox(height: 20,),
-                                                        //
-                                                        //mobile number
-                                                        Text('Mobile Number',style: TextStyle(color: Colors.white),),
-                                                        SizedBox(height: 5,),
-                                                        TextFormField(
-                                                          maxLength: 10,
-                                                          controller: number,
-                                                          decoration: InputDecoration(
-                                                            counterStyle: TextStyle(color: Colors.white),
-                                                            prefixIcon: Icon(Icons.phone, color: Colors.white),
-                                                            hintText: 'Enter Mobile Number',
-                                                            hintStyle: TextStyle(color: Colors.white54),
-                                                            contentPadding: EdgeInsets.all(10.0),
-                                                            filled: true,
-                                                            fillColor: Colors.white30,
-                                                            border: OutlineInputBorder(
-                                                              borderRadius: BorderRadius.all(Radius.circular(12)),
-                                                              borderSide: BorderSide.none,
-                                                            ),
-                                                          ),
-                                                          style: TextStyle(fontSize: 15, color: Colors.white),
-                                                        ),
-                                                        //
-                                                        //date
-                                                        Text('Date Of Birth',style: TextStyle(color: Colors.white),),
-                                                        SizedBox(height: 5,),
-                                                        TextFormField(
-                                                          keyboardType: TextInputType.datetime,
-                                                          readOnly: true,
-                                                          controller: dateOfBirth,
-                                                          onTap: ()async{
-                                                            DateTime? selectedDate = await showDatePicker(
-                                                              context: context,
-                                                              initialDate: DateTime.now(),
-                                                              firstDate: DateTime(1700),
-                                                              lastDate: DateTime(2026),
-                                                            );
-                                                            setState(() {
-                                                              dateOfBirth.text = DateFormat('dd-MM-yyyy').format(selectedDate!);
-                                                            });
-                                                          },
-                                                          decoration: InputDecoration(
-                                                            prefixIcon: Icon(Icons.date_range, color: Colors.white),
-                                                            hintText: 'Enter Date Of Birth',
-                                                            hintStyle: TextStyle(color: Colors.white54),
-                                                            contentPadding: EdgeInsets.all(10.0),
-                                                            filled: true,
-                                                            fillColor: Colors.white30,
-                                                            border: OutlineInputBorder(
-                                                              borderRadius: BorderRadius.all(Radius.circular(12)),
-                                                              borderSide: BorderSide.none,
-                                                            ),
-                                                          ),
-                                                          style: TextStyle(fontSize: 15, color: Colors.white),
-                                                        ),
-                                                        SizedBox(height: 20),
-                                                        //
-                                                        //city
-                                                        Text('City',style: TextStyle(color: Colors.white),),
-                                                        SizedBox(height: 5,),
-                                                        Container(
-                                                          decoration: BoxDecoration(
-                                                            color: Colors.white30,
-                                                            // border: Border.all()
-                                                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                                                          ),
-                                                          child: DropdownButton(
-                                                            padding: EdgeInsets.all(0),
-                                                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                                                            value: selectedCity,
-                                                            dropdownColor: Colors.black87,
-                                                            items: cities.map<DropdownMenuItem<String>>((String city) {
-                                                              return DropdownMenuItem<String>(
-                                                                value: city,
-                                                                child: Padding(
-                                                                  padding: EdgeInsets.all(8.0),
-                                                                  child: Text(city,style: TextStyle(color: Colors.white,),),
-                                                                ),
-                                                              );
-                                                            }).toList(),
-                                                            onChanged: (value){
-                                                              setState(() {
-                                                                selectedCity = value;
-                                                              });
-                                                            },
-                                                          ),
-                                                        ),
-                                                        SizedBox(height: 20,),
-                                                        //
-                                                        //Gender
-                                                        Text('Gender',style: TextStyle(color: Colors.white),),
-                                                        SizedBox(height: 5,),
-                                                        SizedBox(
-                                                          width: double.infinity,
-                                                          child: Wrap(
-                                                            children: [
-                                                              RadioListTile(value: 'Male',title: Text('Male',style: TextStyle(color: Colors.white),), groupValue: gender, onChanged: (value){setState(() {gender = value!;});}),
-                                                              RadioListTile(value: 'Female',title: Text('Female',style: TextStyle(color: Colors.white),), groupValue: gender, onChanged: (value){setState(() {gender = value!;});}),
-                                                            ],
-                                                          ),
-                                                        ),
-
-                                                        //
-                                                        //Hobbies
-                                                        Text('Hobbies',style: TextStyle(color: Colors.white),),
-                                                        SizedBox(height: 5,),
-                                                        Wrap(
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              String tempGender = gender!;
+                                              return StatefulBuilder(
+                                                builder: (context, setState) {
+                                                  return Dialog(
+                                                    insetPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                                                    backgroundColor: Colors.black87,
+                                                    child: Container(
+                                                      width: MediaQuery.of(context).size.width,
+                                                      child: Padding(
+                                                        padding: EdgeInsets.all(20),
+                                                        child: Column(
+                                                          mainAxisSize: MainAxisSize.min,
                                                           children: [
-                                                            CheckboxListTile(
-                                                              title: Text('Games', style: TextStyle(color: Colors.white)),
-                                                              value: isGames,
-                                                              onChanged: (value) {
-                                                                setState(() {
-                                                                  isGames = value!;
-                                                                });
-                                                              },
-                                                              activeColor: Colors.green,
+                                                            Text(
+                                                              'Update User',
+                                                              style: TextStyle(color: Colors.white70, fontSize: 18, fontWeight: FontWeight.bold),
                                                             ),
-                                                            CheckboxListTile(
-                                                              title: Text('Movies', style: TextStyle(color: Colors.white)),
-                                                              value: isMovies,
-                                                              onChanged: (value) {
-                                                                setState(() {
-                                                                  isMovies = value!;
-                                                                });
-                                                              },
-                                                              activeColor: Colors.green,
+                                                            SizedBox(height: 20),
+                                                            Expanded(
+                                                              child: SingleChildScrollView(
+                                                                child: Column(
+                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                  children: [
+                                                                    // name
+                                                                    Text('name', style: TextStyle(color: Colors.white)),
+                                                                    SizedBox(height: 5),
+                                                                    TextFormField(
+                                                                      maxLength: 50,
+                                                                      controller: name,
+                                                                      decoration: InputDecoration(
+                                                                        prefixIcon: Icon(Icons.drive_file_rename_outline, color: Colors.white),
+                                                                        hintText: 'Enter your Name',
+                                                                        hintStyle: TextStyle(color: Colors.white54),
+                                                                        contentPadding: EdgeInsets.all(10.0),
+                                                                        filled: true,
+                                                                        counterStyle: TextStyle(color: Colors.white),
+                                                                        fillColor: Colors.white30,
+                                                                        border: OutlineInputBorder(
+                                                                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                                                                          borderSide: BorderSide.none,
+                                                                        ),
+                                                                      ),
+                                                                      style: TextStyle(fontSize: 15, color: Colors.white),
+                                                                    ),
+
+                                                                    // Email Address
+                                                                    Text('E-mail', style: TextStyle(color: Colors.white)),
+                                                                    SizedBox(height: 5),
+                                                                    TextFormField(
+                                                                      controller: email,
+                                                                      decoration: InputDecoration(
+                                                                        prefixIcon: Icon(Icons.email, color: Colors.white),
+                                                                        hintText: 'Enter your E-mail',
+                                                                        hintStyle: TextStyle(color: Colors.white54),
+                                                                        contentPadding: EdgeInsets.all(10.0),
+                                                                        filled: true,
+                                                                        fillColor: Colors.white30,
+                                                                        border: OutlineInputBorder(
+                                                                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                                                                          borderSide: BorderSide.none,
+                                                                        ),
+                                                                      ),
+                                                                      style: TextStyle(fontSize: 15, color: Colors.white),
+                                                                    ),
+                                                                    SizedBox(height: 20),
+
+                                                                    // mobile number
+                                                                    Text('Mobile Number', style: TextStyle(color: Colors.white)),
+                                                                    SizedBox(height: 5),
+                                                                    TextFormField(
+                                                                      maxLength: 10,
+                                                                      controller: number,
+                                                                      decoration: InputDecoration(
+                                                                        counterStyle: TextStyle(color: Colors.white),
+                                                                        prefixIcon: Icon(Icons.phone, color: Colors.white),
+                                                                        hintText: 'Enter Mobile Number',
+                                                                        hintStyle: TextStyle(color: Colors.white54),
+                                                                        contentPadding: EdgeInsets.all(10.0),
+                                                                        filled: true,
+                                                                        fillColor: Colors.white30,
+                                                                        border: OutlineInputBorder(
+                                                                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                                                                          borderSide: BorderSide.none,
+                                                                        ),
+                                                                      ),
+                                                                      style: TextStyle(fontSize: 15, color: Colors.white),
+                                                                    ),
+
+                                                                    // date
+                                                                    Text('Date Of Birth', style: TextStyle(color: Colors.white)),
+                                                                    SizedBox(height: 5),
+                                                                    TextFormField(
+                                                                      keyboardType: TextInputType.datetime,
+                                                                      readOnly: true,
+                                                                      controller: dateOfBirth,
+                                                                      onTap: () async {
+                                                                        DateTime? selectedDate = await showDatePicker(
+                                                                          context: context,
+                                                                          initialDate: DateTime.now(),
+                                                                          firstDate: DateTime(1700),
+                                                                          lastDate: DateTime(2026),
+                                                                        );
+                                                                        setState(() {
+                                                                          dateOfBirth.text = DateFormat('dd-MM-yyyy').format(selectedDate!);
+                                                                        });
+                                                                      },
+                                                                      decoration: InputDecoration(
+                                                                        prefixIcon: Icon(Icons.date_range, color: Colors.white),
+                                                                        hintText: 'Enter Date Of Birth',
+                                                                        hintStyle: TextStyle(color: Colors.white54),
+                                                                        contentPadding: EdgeInsets.all(10.0),
+                                                                        filled: true,
+                                                                        fillColor: Colors.white30,
+                                                                        border: OutlineInputBorder(
+                                                                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                                                                          borderSide: BorderSide.none,
+                                                                        ),
+                                                                      ),
+                                                                      style: TextStyle(fontSize: 15, color: Colors.white),
+                                                                    ),
+                                                                    SizedBox(height: 20),
+
+                                                                    // city
+                                                                    Text('City', style: TextStyle(color: Colors.white)),
+                                                                    SizedBox(height: 5),
+                                                                    Container(
+                                                                      width: double.infinity,
+                                                                      decoration: BoxDecoration(
+                                                                        color: Colors.white30,
+                                                                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                                                                      ),
+                                                                      child: DropdownButton(
+                                                                        isExpanded: true,
+                                                                        padding: EdgeInsets.all(8),
+                                                                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                                                                        value: selectedCity,
+                                                                        dropdownColor: Colors.black87,
+                                                                        items: cities.map<DropdownMenuItem<String>>((String city) {
+                                                                          return DropdownMenuItem<String>(
+                                                                            value: city,
+                                                                            child: Padding(
+                                                                              padding: EdgeInsets.all(8.0),
+                                                                              child: Text(city, style: TextStyle(color: Colors.white)),
+                                                                            ),
+                                                                          );
+                                                                        }).toList(),
+                                                                        onChanged: (value) {
+                                                                          setState(() {
+                                                                            selectedCity = value;
+                                                                          });
+                                                                        },
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(height: 20),
+
+                                                                    // Gender
+                                                                    Text('Gender', style: TextStyle(color: Colors.white)),
+                                                                    SizedBox(height: 5),
+                                                                    SizedBox(
+                                                                      width: double.infinity,
+                                                                      child: Wrap(
+                                                                        children: [
+                                                                          RadioListTile(
+                                                                              value: 'Male',
+                                                                              title: Text('Male', style: TextStyle(color: Colors.white)),
+                                                                              groupValue: gender,
+                                                                              onChanged: (value) {
+                                                                                setState(() {
+                                                                                  gender = value!;
+                                                                                });
+                                                                              }
+                                                                          ),
+                                                                          RadioListTile(
+                                                                              value: 'Female',
+                                                                              title: Text('Female', style: TextStyle(color: Colors.white)),
+                                                                              groupValue: gender,
+                                                                              onChanged: (value) {
+                                                                                setState(() {
+                                                                                  gender = value!;
+                                                                                });
+                                                                              }
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+
+                                                                    // Hobbies
+                                                                    Text('Hobbies', style: TextStyle(color: Colors.white)),
+                                                                    SizedBox(height: 5),
+                                                                    Wrap(
+                                                                      children: [
+                                                                        CheckboxListTile(
+                                                                          title: Text('Games', style: TextStyle(color: Colors.white)),
+                                                                          value: isGames,
+                                                                          onChanged: (value) {
+                                                                            setState(() {
+                                                                              isGames = value!;
+                                                                            });
+                                                                          },
+                                                                          activeColor: Colors.green,
+                                                                        ),
+                                                                        CheckboxListTile(
+                                                                          title: Text('Movies', style: TextStyle(color: Colors.white)),
+                                                                          value: isMovies,
+                                                                          onChanged: (value) {
+                                                                            setState(() {
+                                                                              isMovies = value!;
+                                                                            });
+                                                                          },
+                                                                          activeColor: Colors.green,
+                                                                        ),
+                                                                        CheckboxListTile(
+                                                                          title: Text('Music', style: TextStyle(color: Colors.white)),
+                                                                          value: isMusic,
+                                                                          onChanged: (value) {
+                                                                            setState(() {
+                                                                              isMusic = value!;
+                                                                            });
+                                                                          },
+                                                                          activeColor: Colors.green,
+                                                                        ),
+                                                                        CheckboxListTile(
+                                                                          title: Text('Dance', style: TextStyle(color: Colors.white)),
+                                                                          value: isDance,
+                                                                          onChanged: (value) {
+                                                                            setState(() {
+                                                                              isDance = value!;
+                                                                            });
+                                                                          },
+                                                                          activeColor: Colors.green,
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    SizedBox(height: 20),
+                                                                  ],
+                                                                ),
+                                                              ),
                                                             ),
-                                                            CheckboxListTile(
-                                                              title: Text('Music', style: TextStyle(color: Colors.white)),
-                                                              value: isMusic,
-                                                              onChanged: (value) {
-                                                                setState(() {
-                                                                  isMusic = value!;
-                                                                });
-                                                              },
-                                                              activeColor: Colors.green,
-                                                            ),
-                                                            CheckboxListTile(
-                                                              title: Text('Dance', style: TextStyle(color: Colors.white)),
-                                                              value: isDance,
-                                                              onChanged: (value) {
-                                                                setState(() {
-                                                                  isDance = value!;
-                                                                });
-                                                              },
-                                                              activeColor: Colors.green,
+                                                            Row(
+                                                              mainAxisAlignment: MainAxisAlignment.end,
+                                                              children: [
+                                                                // update button
+                                                                ElevatedButton(
+                                                                    onPressed: () {
+                                                                      setState(() {
+                                                                        if (isDance) selectedHobbies.add('Dancing');
+                                                                        if (isMusic) selectedHobbies.add('Listing Music');
+                                                                        if (isMovies) selectedHobbies.add('Watching Movies');
+                                                                        if (isGames) selectedHobbies.add('Playing Games');
+                                                                      });
+                                                                      if (validateInputs()) {
+                                                                        setState(() {
+                                                                          Map<String, dynamic> updatedsortedUser = {
+                                                                            'name': name.text,
+                                                                            'number': number.text,
+                                                                            'email': email.text,
+                                                                            'gender': tempGender,
+                                                                            'dateOfBirth': dateOfBirth.text,
+                                                                            'selectedCity': selectedCity,
+                                                                            'isDance': isDance ? 1 : 0,
+                                                                            'isMusic': isMusic ? 1 : 0,
+                                                                            'isMovies': isMovies ? 1 : 0,
+                                                                            'isGames': isGames ? 1 : 0,
+                                                                            'isFavourite': sortedUser[index]['isFavourite'],
+                                                                          };
+                                                                          updateUserFun(sortedUser[index]['id'], updatedsortedUser);
+                                                                        });
+
+                                                                        clerInput();
+                                                                        Navigator.pop(context);
+                                                                      }
+                                                                    },
+                                                                    child: Text('Update')
+                                                                ),
+                                                                SizedBox(width: 10),
+                                                                ElevatedButton(
+                                                                    onPressed: () {
+                                                                      Navigator.pop(context);
+                                                                      clerInput();
+                                                                    },
+                                                                    child: Text('Cancel')
+                                                                ),
+                                                              ],
                                                             ),
                                                           ],
                                                         ),
-                                                        SizedBox(height: 20,),
-                                                      ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                  actions: [
-                                                    //update button
-                                                    ElevatedButton(onPressed: (){
-                                                      setState(() {
-                                                        if(isDance)selectedHobbies.add('Dancing');
-                                                        if(isMusic)selectedHobbies.add('Listing Music');
-                                                        if(isMovies)selectedHobbies.add('Watching Movies');
-                                                        if(isGames)selectedHobbies.add('Playing Games');
-                                                      });
-                                                      if(validateInputs()){
-                                                        setState(() {
-                                                          Map<String, dynamic> updatedsortedUser = {
-                                                            'name': name.text,
-                                                            'number': number.text,
-                                                            'email': email.text,
-                                                            'gender': tempGender,
-                                                            'dateOfBirth': dateOfBirth.text,
-                                                            'selectedCity': selectedCity,
-                                                            'isDance': isDance?1:0,
-                                                            'isMusic': isMusic?1:0,
-                                                            'isMovies': isMovies?1:0,
-                                                            'isGames': isGames?1:0,
-                                                            'isFavourite':sortedUser[index]['isFavourite'],
-                                                          };
-                                                          updateUserFun(sortedUser[index]['id'],updatedsortedUser);
-                                                        });
-
-                                                        clerInput();
-                                                        Navigator.pop(context);
-                                                      }
-                                                    }, child: Text('Update')),
-                                                    ElevatedButton(onPressed: (){
-                                                      Navigator.pop(context);
-                                                      clerInput();
-                                                    }, child: Text('Cancel')),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          });
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          );
                                         }, icon: Icon(Icons.edit,color: Colors.green,)),
                                         //delete
                                         IconButton(onPressed: () async{

@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AboutUsPage extends StatelessWidget {
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(

@@ -186,33 +186,53 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       )
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(height: 30,),
+
+                    Row(
+                      children: [
+                        Expanded(child: Divider()), // Left divider
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          child: Text("Other Login Options"), // Your text in between
+                        ),
+                        Expanded(child: Divider()), // Right divider
+                      ],
+                    ),
 
                     //
                     //login with google button
-                    ElevatedButton(
-                      onPressed: () async {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (context) => Center(child: CircularProgressIndicator()),
-                        );
-
-                        UserCredential? userCredential = await loginWithGoogle();
-
-                        Navigator.pop(context);
-
-                        if (userCredential != null) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => Homepage()),
+                    SizedBox(height: 20,),
+                    Center(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.all(8),
+                          backgroundColor: Colors.white,
+                          shape: CircleBorder(),
+                        ),
+                        onPressed: () async {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) => Center(child: CircularProgressIndicator()),
                           );
-                        } else {
-                          showError('Failed to login with Google');
-                        }
-                      },
-                      child: Text('Sign in with Google'),
+
+                          UserCredential? userCredential = await loginWithGoogle();
+
+                          Navigator.pop(context);
+
+                          if (userCredential != null) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => Homepage()),
+                            );
+                          } else {
+                            showError('Failed to login with Google');
+                          }
+                        },
+                        child: Image.asset('assets/images/google_image.png',height: 30,),
+                      ),
                     ),
+                    SizedBox(height: 15,),
                     //Login Button
                     Center(
                       child: ElevatedButton(
