@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:untitled/pages/main_animation_page.dart';
@@ -114,23 +115,24 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
     );
   }
 
-  Widget showSortDropdownButton(context){
-    return StatefulBuilder(
-      builder: (context, setState) => DropdownButtonHideUnderline(
-        child: DropdownButton(
-          // icon: Icon(Icons.ac_unit),
-          value: selectedFilter,
-          padding: EdgeInsets.symmetric(horizontal: 10,vertical: 0),
-          borderRadius: BorderRadius.circular(12),
-          items: [
-            DropdownMenuItem(child: Text('Name(a-z)',style: TextStyle(color: Colors.black87),),value: 'Name(a-z)',),
-            DropdownMenuItem(child: Text('Name(z-a)',style: TextStyle(color: Colors.black87),),value: 'Name(z-a)',),
-            DropdownMenuItem(child: Text('City(a-z)',style: TextStyle(color: Colors.black87),),value: 'City(a-z)',),
-            DropdownMenuItem(child: Text('City(z-a)',style: TextStyle(color: Colors.black87),),value: 'City(z-a)',),
-          ],
-          onChanged: (value) {
-            sortUserArray(value!);
-          },),
+  Widget showSortDropdownButton(context) {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton(
+        value: selectedFilter,
+        padding: EdgeInsets.symmetric(horizontal: 2, vertical: 0), // Reduced padding
+        borderRadius: BorderRadius.circular(8),
+        dropdownColor: Colors.white,
+        icon: Icon(Icons.arrow_drop_down, color: Theme.of(context).primaryColor, size: 22), // Smaller icon
+        style: TextStyle(color: Colors.black87, fontSize: 14,fontWeight: FontWeight.w500), // Smaller text
+        items: [
+          DropdownMenuItem(child: Text('Name (A-Z)', style: TextStyle(fontSize: 14)), value: 'Name(a-z)'),
+          DropdownMenuItem(child: Text('Name (Z-A)', style: TextStyle(fontSize: 14)), value: 'Name(z-a)'),
+          DropdownMenuItem(child: Text('City (A-Z)', style: TextStyle(fontSize: 14)), value: 'City(a-z)'),
+          DropdownMenuItem(child: Text('City (Z-A)', style: TextStyle(fontSize: 14)), value: 'City(z-a)'),
+        ],
+        onChanged: (value) {
+          sortUserArray(value!);
+        },
       ),
     );
   }
@@ -189,7 +191,7 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                   // search
                   Container(
                     decoration: BoxDecoration(
-                      color: Color(0x93FFFFFF),
+                      color: Color(0xFFFFFFFF),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: TextFormField(
@@ -200,8 +202,8 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                       },
                       controller: searchUser,
                       decoration: InputDecoration(
-                        fillColor: Colors.white.withAlpha(90),
-                        prefixIcon: Icon(Icons.search_rounded),
+                        fillColor: Colors.white,
+                        prefixIcon: Icon(Icons.search_rounded,color: Color(0xFF472272),size: 27,),
                         hintText: 'Search User',
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                         isDense: true,
@@ -212,20 +214,41 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                   SizedBox(height: 10,),
 
                   Container(
-                    padding: EdgeInsets.all(2),
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 6,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Icon(Icons.filter_alt),
-                        Text('Sort By :'),
-                        SizedBox(width: 10,),
-                        Container(child: showSortDropdownButton(context),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Color(0x99b496ea),
-                        ),),
+                        Icon(Icons.sort, color: Theme.of(context).primaryColor, size: 24),
+                        SizedBox(width: 8),
+                        Text('Sort By:',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Theme.of(context).primaryColor.withOpacity(0.2),
+                          ),
+                          child: showSortDropdownButton(context),
+                        ),
                       ],
-                    )
+                    ),
                   ),
 
                   //
@@ -362,7 +385,7 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                       //name
                                       child: Row(
                                         children: [
-                                          Icon(Icons.person,size: 28,),
+                                          Icon(Icons.person,size: 28,color: Color(0xFF472272)),
                                           SizedBox(width: 8),
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -430,296 +453,463 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                             if(sortedUser[index]['isMusic'] == 1)isMusic = true;
                                           });
 
-                                          showDialog(
+                                          showModalBottomSheet(
                                             context: context,
+                                            isScrollControlled: true,
                                             builder: (BuildContext context) {
                                               String tempGender = gender!;
                                               return StatefulBuilder(
                                                 builder: (context, setState) {
-                                                  return Dialog(
-                                                    insetPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                                                    backgroundColor: Colors.black87,
-                                                    child: Container(
-                                                      width: MediaQuery.of(context).size.width,
-                                                      child: Padding(
-                                                        padding: EdgeInsets.all(20),
-                                                        child: Column(
-                                                          mainAxisSize: MainAxisSize.min,
-                                                          children: [
-                                                            Text(
-                                                              'Update User',
-                                                              style: TextStyle(color: Colors.white70, fontSize: 18, fontWeight: FontWeight.bold),
+                                                  return Container(
+                                                    height: MediaQuery.of(context).size.height * 0.9,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius: BorderRadius.only(
+                                                        topLeft: Radius.circular(12),
+                                                        topRight: Radius.circular(12),
+                                                      ),
+                                                    ),
+                                                    child: Column(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      children: [
+                                                        // Handle bar at the top
+                                                        Container(
+                                                          width: 36,
+                                                          height: 4,
+                                                          margin: EdgeInsets.symmetric(vertical: 8),
+                                                          decoration: BoxDecoration(
+                                                            color: Colors.grey[400],
+                                                            borderRadius: BorderRadius.circular(2),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                                          decoration: BoxDecoration(
+                                                            border: Border(
+                                                              bottom: BorderSide(
+                                                                color: Colors.grey[300]!,
+                                                                width: 1,
+                                                              ),
                                                             ),
-                                                            SizedBox(height: 20),
-                                                            Expanded(
-                                                              child: SingleChildScrollView(
-                                                                child: Column(
-                                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                                  children: [
-                                                                    // name
-                                                                    Text('name', style: TextStyle(color: Colors.white)),
-                                                                    SizedBox(height: 5),
-                                                                    TextFormField(
-                                                                      maxLength: 50,
-                                                                      controller: name,
-                                                                      decoration: InputDecoration(
-                                                                        prefixIcon: Icon(Icons.drive_file_rename_outline, color: Colors.white),
-                                                                        hintText: 'Enter your Name',
-                                                                        hintStyle: TextStyle(color: Colors.white54),
-                                                                        contentPadding: EdgeInsets.all(10.0),
-                                                                        filled: true,
-                                                                        counterStyle: TextStyle(color: Colors.white),
-                                                                        fillColor: Colors.white30,
-                                                                        border: OutlineInputBorder(
-                                                                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                                                                          borderSide: BorderSide.none,
-                                                                        ),
-                                                                      ),
-                                                                      style: TextStyle(fontSize: 15, color: Colors.white),
-                                                                    ),
-
-                                                                    // Email Address
-                                                                    Text('E-mail', style: TextStyle(color: Colors.white)),
-                                                                    SizedBox(height: 5),
-                                                                    TextFormField(
-                                                                      controller: email,
-                                                                      decoration: InputDecoration(
-                                                                        prefixIcon: Icon(Icons.email, color: Colors.white),
-                                                                        hintText: 'Enter your E-mail',
-                                                                        hintStyle: TextStyle(color: Colors.white54),
-                                                                        contentPadding: EdgeInsets.all(10.0),
-                                                                        filled: true,
-                                                                        fillColor: Colors.white30,
-                                                                        border: OutlineInputBorder(
-                                                                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                                                                          borderSide: BorderSide.none,
-                                                                        ),
-                                                                      ),
-                                                                      style: TextStyle(fontSize: 15, color: Colors.white),
-                                                                    ),
-                                                                    SizedBox(height: 20),
-
-                                                                    // mobile number
-                                                                    Text('Mobile Number', style: TextStyle(color: Colors.white)),
-                                                                    SizedBox(height: 5),
-                                                                    TextFormField(
-                                                                      maxLength: 10,
-                                                                      controller: number,
-                                                                      decoration: InputDecoration(
-                                                                        counterStyle: TextStyle(color: Colors.white),
-                                                                        prefixIcon: Icon(Icons.phone, color: Colors.white),
-                                                                        hintText: 'Enter Mobile Number',
-                                                                        hintStyle: TextStyle(color: Colors.white54),
-                                                                        contentPadding: EdgeInsets.all(10.0),
-                                                                        filled: true,
-                                                                        fillColor: Colors.white30,
-                                                                        border: OutlineInputBorder(
-                                                                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                                                                          borderSide: BorderSide.none,
-                                                                        ),
-                                                                      ),
-                                                                      style: TextStyle(fontSize: 15, color: Colors.white),
-                                                                    ),
-
-                                                                    // date
-                                                                    Text('Date Of Birth', style: TextStyle(color: Colors.white)),
-                                                                    SizedBox(height: 5),
-                                                                    TextFormField(
-                                                                      keyboardType: TextInputType.datetime,
-                                                                      readOnly: true,
-                                                                      controller: dateOfBirth,
-                                                                      onTap: () async {
-                                                                        DateTime? selectedDate = await showDatePicker(
-                                                                          context: context,
-                                                                          initialDate: DateTime.now(),
-                                                                          firstDate: DateTime(1700),
-                                                                          lastDate: DateTime(2026),
-                                                                        );
-                                                                        setState(() {
-                                                                          dateOfBirth.text = DateFormat('dd-MM-yyyy').format(selectedDate!);
-                                                                        });
-                                                                      },
-                                                                      decoration: InputDecoration(
-                                                                        prefixIcon: Icon(Icons.date_range, color: Colors.white),
-                                                                        hintText: 'Enter Date Of Birth',
-                                                                        hintStyle: TextStyle(color: Colors.white54),
-                                                                        contentPadding: EdgeInsets.all(10.0),
-                                                                        filled: true,
-                                                                        fillColor: Colors.white30,
-                                                                        border: OutlineInputBorder(
-                                                                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                                                                          borderSide: BorderSide.none,
-                                                                        ),
-                                                                      ),
-                                                                      style: TextStyle(fontSize: 15, color: Colors.white),
-                                                                    ),
-                                                                    SizedBox(height: 20),
-
-                                                                    // city
-                                                                    Text('City', style: TextStyle(color: Colors.white)),
-                                                                    SizedBox(height: 5),
-                                                                    Container(
-                                                                      width: double.infinity,
+                                                          ),
+                                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                            children: [
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.pop(context);
+                                                                  clerInput();
+                                                                },
+                                                                child: Text(
+                                                                  'Cancel',
+                                                                  style: TextStyle(
+                                                                    fontSize: 16,
+                                                                    color: Colors.red,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                'Update User',
+                                                                style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight: FontWeight.w600,
+                                                                  color: Colors.black,
+                                                                ),
+                                                              ),
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  setState(() {
+                                                                    if (isDance) selectedHobbies.add('Dancing');
+                                                                    if (isMusic) selectedHobbies.add('Listing Music');
+                                                                    if (isMovies) selectedHobbies.add('Watching Movies');
+                                                                    if (isGames) selectedHobbies.add('Playing Games');
+                                                                  });
+                                                                  if (validateInputs()) {
+                                                                    setState(() {
+                                                                      Map<String, dynamic> updatedsortedUser = {
+                                                                        'name': name.text,
+                                                                        'number': number.text,
+                                                                        'email': email.text,
+                                                                        'gender': tempGender,
+                                                                        'dateOfBirth': dateOfBirth.text,
+                                                                        'selectedCity': selectedCity,
+                                                                        'isDance': isDance ? 1 : 0,
+                                                                        'isMusic': isMusic ? 1 : 0,
+                                                                        'isMovies': isMovies ? 1 : 0,
+                                                                        'isGames': isGames ? 1 : 0,
+                                                                        'isFavourite': sortedUser[index]['isFavourite'],
+                                                                      };
+                                                                      updateUserFun(sortedUser[index]['id'], updatedsortedUser);
+                                                                    });
+                                                                    clerInput();
+                                                                    Navigator.pop(context);
+                                                                  }
+                                                                },
+                                                                child: Text(
+                                                                  'Update',
+                                                                  style: TextStyle(
+                                                                    fontSize: 16,
+                                                                    color: Colors.green,
+                                                                    fontWeight: FontWeight.w600,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          child: SingleChildScrollView(
+                                                            padding: EdgeInsets.all(16),
+                                                            child: Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              children: [
+                                                                Text(
+                                                                  'Name',
+                                                                  style: TextStyle(
+                                                                    fontSize: 14,
+                                                                    color: Colors.black,
+                                                                    fontWeight: FontWeight.w500,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(height: 4),
+                                                                TextField(
+                                                                  controller: name,
+                                                                  maxLength: 50,
+                                                                  decoration: InputDecoration(
+                                                                    prefixIcon: Container(
+                                                                      margin: EdgeInsets.only(left: 12, right: 8),
+                                                                      padding: EdgeInsets.all(12),
                                                                       decoration: BoxDecoration(
-                                                                        color: Colors.white30,
-                                                                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                                                                        color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                                                        borderRadius: BorderRadius.circular(12),
                                                                       ),
-                                                                      child: DropdownButton(
-                                                                        isExpanded: true,
-                                                                        padding: EdgeInsets.all(8),
-                                                                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                                                                        value: selectedCity,
-                                                                        dropdownColor: Colors.black87,
-                                                                        items: cities.map<DropdownMenuItem<String>>((String city) {
-                                                                          return DropdownMenuItem<String>(
-                                                                            value: city,
-                                                                            child: Padding(
-                                                                              padding: EdgeInsets.all(8.0),
-                                                                              child: Text(city, style: TextStyle(color: Colors.white)),
+                                                                      child: Icon(Icons.person, color: Theme.of(context).primaryColor, size: 22),
+                                                                    ),
+                                                                    hintText: 'Enter your Name',
+                                                                    hintStyle: TextStyle(color: Colors.grey.shade400),
+                                                                    filled: true,
+                                                                    fillColor: Colors.grey.shade50,
+                                                                    contentPadding: EdgeInsets.all(20),
+                                                                    border: OutlineInputBorder(
+                                                                      borderRadius: BorderRadius.circular(16),
+                                                                      borderSide: BorderSide.none,
+                                                                    ),
+                                                                    enabledBorder: OutlineInputBorder(
+                                                                      borderRadius: BorderRadius.circular(16),
+                                                                      borderSide: BorderSide(color: Colors.grey.shade200, width: 2),
+                                                                    ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                      borderRadius: BorderRadius.circular(16),
+                                                                      borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                SizedBox(height: 16),
+
+                                                                Text(
+                                                                  'E-mail',
+                                                                  style: TextStyle(
+                                                                    fontSize: 14,
+                                                                    color: Colors.black,
+                                                                    fontWeight: FontWeight.w500,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(height: 4),
+                                                                TextField(
+                                                                  controller: email,
+                                                                  decoration: InputDecoration(
+                                                                    prefixIcon: Container(
+                                                                      margin: EdgeInsets.only(left: 12, right: 8),
+                                                                      padding: EdgeInsets.all(12),
+                                                                      decoration: BoxDecoration(
+                                                                        color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                                                        borderRadius: BorderRadius.circular(12),
+                                                                      ),
+                                                                      child: Icon(Icons.mail, color: Theme.of(context).primaryColor, size: 22),
+                                                                    ),
+                                                                    hintText: 'Enter your E-mail',
+                                                                    hintStyle: TextStyle(color: Colors.grey.shade400),
+                                                                    filled: true,
+                                                                    fillColor: Colors.grey.shade50,
+                                                                    contentPadding: EdgeInsets.all(20),
+                                                                    border: OutlineInputBorder(
+                                                                      borderRadius: BorderRadius.circular(16),
+                                                                      borderSide: BorderSide.none,
+                                                                    ),
+                                                                    enabledBorder: OutlineInputBorder(
+                                                                      borderRadius: BorderRadius.circular(16),
+                                                                      borderSide: BorderSide(color: Colors.grey.shade200, width: 2),
+                                                                    ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                      borderRadius: BorderRadius.circular(16),
+                                                                      borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                SizedBox(height: 16),
+
+                                                                Text(
+                                                                  'Mobile Number',
+                                                                  style: TextStyle(
+                                                                    fontSize: 14,
+                                                                    color: Colors.black,
+                                                                    fontWeight: FontWeight.w500,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(height: 4),
+                                                                TextField(
+                                                                  controller: number,
+                                                                  maxLength: 10,
+                                                                  keyboardType: TextInputType.phone,
+                                                                  decoration: InputDecoration(
+                                                                    prefixIcon: Container(
+                                                                      margin: EdgeInsets.only(left: 12, right: 8),
+                                                                      padding: EdgeInsets.all(12),
+                                                                      decoration: BoxDecoration(
+                                                                        color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                                                        borderRadius: BorderRadius.circular(12),
+                                                                      ),
+                                                                      child: Icon(Icons.phone, color: Theme.of(context).primaryColor, size: 22),
+                                                                    ),
+                                                                    hintText: 'Enter Mobile Number',
+                                                                    hintStyle: TextStyle(color: Colors.grey.shade400),
+                                                                    filled: true,
+                                                                    fillColor: Colors.grey.shade50,
+                                                                    contentPadding: EdgeInsets.all(20),
+                                                                    border: OutlineInputBorder(
+                                                                      borderRadius: BorderRadius.circular(16),
+                                                                      borderSide: BorderSide.none,
+                                                                    ),
+                                                                    enabledBorder: OutlineInputBorder(
+                                                                      borderRadius: BorderRadius.circular(16),
+                                                                      borderSide: BorderSide(color: Colors.grey.shade200, width: 2),
+                                                                    ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                      borderRadius: BorderRadius.circular(16),
+                                                                      borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                SizedBox(height: 16),
+
+                                                                Text(
+                                                                  'Date of Birth',
+                                                                  style: TextStyle(
+                                                                    fontSize: 14,
+                                                                    color: Colors.black,
+                                                                    fontWeight: FontWeight.w500,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(height: 4),
+                                                                TextField(
+                                                                  controller: dateOfBirth,
+                                                                  decoration: InputDecoration(
+                                                                    prefixIcon: Container(
+                                                                      margin: EdgeInsets.only(left: 12, right: 8),
+                                                                      padding: EdgeInsets.all(12),
+                                                                      decoration: BoxDecoration(
+                                                                        color: Theme.of(context).primaryColor.withOpacity(0.1),
+                                                                        borderRadius: BorderRadius.circular(12),
+                                                                      ),
+                                                                      child: Icon(Icons.calendar_today, color: Theme.of(context).primaryColor, size: 22),
+                                                                    ),
+                                                                    hintText: 'Select Date of Birth',
+                                                                    hintStyle: TextStyle(color: Colors.grey.shade400),
+                                                                    filled: true,
+                                                                    fillColor: Colors.grey.shade50,
+                                                                    contentPadding: EdgeInsets.all(20),
+                                                                    border: OutlineInputBorder(
+                                                                      borderRadius: BorderRadius.circular(16),
+                                                                      borderSide: BorderSide.none,
+                                                                    ),
+                                                                    enabledBorder: OutlineInputBorder(
+                                                                      borderRadius: BorderRadius.circular(16),
+                                                                      borderSide: BorderSide(color: Colors.grey.shade200, width: 2),
+                                                                    ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                      borderRadius: BorderRadius.circular(16),
+                                                                      borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2),
+                                                                    ),
+                                                                  ),
+                                                                  readOnly: true,
+                                                                  onTap: () async {
+                                                                    final DateTime? picked = await showDatePicker(
+                                                                      context: context,
+                                                                      initialDate: DateTime.now(),
+                                                                      firstDate: DateTime(1900),
+                                                                      lastDate: DateTime.now(),
+                                                                    );
+                                                                    if (picked != null) {
+                                                                      setState(() {
+                                                                        dateOfBirth.text = DateFormat('dd-MM-yyyy').format(picked);
+                                                                      });
+                                                                    }
+                                                                  },
+                                                                ),
+
+                                                                SizedBox(height: 16),
+
+                                                                Text(
+                                                                  'City',
+                                                                  style: TextStyle(
+                                                                    fontSize: 14,
+                                                                    color: Colors.black,
+                                                                    fontWeight: FontWeight.w500,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(height: 4),
+                                                                Container(
+                                                                  decoration: BoxDecoration(
+                                                                    color: Colors.grey.shade50,
+                                                                    borderRadius: BorderRadius.circular(8),
+                                                                  ),
+                                                                  child: ListTile(
+                                                                    title: Text(
+                                                                      selectedCity ?? 'Select City',
+                                                                      style: TextStyle(
+                                                                        fontSize: 16,
+                                                                        color: selectedCity != null ? Colors.black : Colors.grey,
+                                                                      ),
+                                                                    ),
+                                                                    trailing: Icon(Icons.arrow_drop_down, color: Colors.grey),
+                                                                    onTap: () {
+                                                                      showModalBottomSheet(
+                                                                        context: context,
+                                                                        builder: (BuildContext context) {
+                                                                          return Container(
+                                                                            height: 216,
+                                                                            child: ListView.builder(
+                                                                              itemCount: cities.length,
+                                                                              itemBuilder: (context, index) {
+                                                                                return ListTile(
+                                                                                  title: Text(cities[index]),
+                                                                                  onTap: () {
+                                                                                    setState(() {
+                                                                                      selectedCity = cities[index];
+                                                                                    });
+                                                                                    Navigator.pop(context);
+                                                                                  },
+                                                                                );
+                                                                              },
                                                                             ),
                                                                           );
-                                                                        }).toList(),
-                                                                        onChanged: (value) {
+                                                                        },
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                                SizedBox(height: 16),
+
+                                                                Text(
+                                                                  'Gender',
+                                                                  style: TextStyle(
+                                                                    fontSize: 14,
+                                                                    color: Colors.black,
+                                                                    fontWeight: FontWeight.w500,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(height: 8),
+                                                                Container(
+                                                                  decoration: BoxDecoration(
+                                                                    color: Colors.grey.shade50,
+                                                                    borderRadius: BorderRadius.circular(8),
+                                                                  ),
+                                                                  padding: EdgeInsets.all(4),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Expanded(
+                                                                        child: RadioListTile<String>(
+                                                                          title: Text('Male'),
+                                                                          value: 'Male',
+                                                                          groupValue: gender,
+                                                                          onChanged: (String? value) {
+                                                                            setState(() {
+                                                                              gender = value;
+                                                                            });
+                                                                          },
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        child: RadioListTile<String>(
+                                                                          title: Text('Female'),
+                                                                          value: 'Female',
+                                                                          groupValue: gender,
+                                                                          onChanged: (String? value) {
+                                                                            setState(() {
+                                                                              gender = value;
+                                                                            });
+                                                                          },
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                SizedBox(height: 16),
+
+                                                                Text(
+                                                                  'Hobbies',
+                                                                  style: TextStyle(
+                                                                    fontSize: 14,
+                                                                    color: Colors.black,
+                                                                    fontWeight: FontWeight.w500,
+                                                                  ),
+                                                                ),
+                                                                SizedBox(height: 8),
+                                                                Container(
+                                                                  decoration: BoxDecoration(
+                                                                    color:Colors.grey.shade50,
+                                                                    borderRadius: BorderRadius.circular(8),
+                                                                  ),
+                                                                  child: Column(
+                                                                    children: [
+                                                                      SwitchListTile(
+                                                                        title: Text('Games'),
+                                                                        value: isGames,
+                                                                        onChanged: (bool value) {
                                                                           setState(() {
-                                                                            selectedCity = value;
+                                                                            isGames = value;
                                                                           });
                                                                         },
                                                                       ),
-                                                                    ),
-                                                                    SizedBox(height: 20),
-
-                                                                    // Gender
-                                                                    Text('Gender', style: TextStyle(color: Colors.white)),
-                                                                    SizedBox(height: 5),
-                                                                    SizedBox(
-                                                                      width: double.infinity,
-                                                                      child: Wrap(
-                                                                        children: [
-                                                                          RadioListTile(
-                                                                              value: 'Male',
-                                                                              title: Text('Male', style: TextStyle(color: Colors.white)),
-                                                                              groupValue: gender,
-                                                                              onChanged: (value) {
-                                                                                setState(() {
-                                                                                  gender = value!;
-                                                                                });
-                                                                              }
-                                                                          ),
-                                                                          RadioListTile(
-                                                                              value: 'Female',
-                                                                              title: Text('Female', style: TextStyle(color: Colors.white)),
-                                                                              groupValue: gender,
-                                                                              onChanged: (value) {
-                                                                                setState(() {
-                                                                                  gender = value!;
-                                                                                });
-                                                                              }
-                                                                          ),
-                                                                        ],
+                                                                      Divider(height: 1, color: Colors.grey[300]),
+                                                                      SwitchListTile(
+                                                                        title: Text('Movies'),
+                                                                        value: isMovies,
+                                                                        onChanged: (bool value) {
+                                                                          setState(() {
+                                                                            isMovies = value;
+                                                                          });
+                                                                        },
                                                                       ),
-                                                                    ),
-
-                                                                    // Hobbies
-                                                                    Text('Hobbies', style: TextStyle(color: Colors.white)),
-                                                                    SizedBox(height: 5),
-                                                                    Wrap(
-                                                                      children: [
-                                                                        CheckboxListTile(
-                                                                          title: Text('Games', style: TextStyle(color: Colors.white)),
-                                                                          value: isGames,
-                                                                          onChanged: (value) {
-                                                                            setState(() {
-                                                                              isGames = value!;
-                                                                            });
-                                                                          },
-                                                                          activeColor: Colors.green,
-                                                                        ),
-                                                                        CheckboxListTile(
-                                                                          title: Text('Movies', style: TextStyle(color: Colors.white)),
-                                                                          value: isMovies,
-                                                                          onChanged: (value) {
-                                                                            setState(() {
-                                                                              isMovies = value!;
-                                                                            });
-                                                                          },
-                                                                          activeColor: Colors.green,
-                                                                        ),
-                                                                        CheckboxListTile(
-                                                                          title: Text('Music', style: TextStyle(color: Colors.white)),
-                                                                          value: isMusic,
-                                                                          onChanged: (value) {
-                                                                            setState(() {
-                                                                              isMusic = value!;
-                                                                            });
-                                                                          },
-                                                                          activeColor: Colors.green,
-                                                                        ),
-                                                                        CheckboxListTile(
-                                                                          title: Text('Dance', style: TextStyle(color: Colors.white)),
-                                                                          value: isDance,
-                                                                          onChanged: (value) {
-                                                                            setState(() {
-                                                                              isDance = value!;
-                                                                            });
-                                                                          },
-                                                                          activeColor: Colors.green,
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                    SizedBox(height: 20),
-                                                                  ],
+                                                                      Divider(height: 1, color: Colors.grey[300]),
+                                                                      SwitchListTile(
+                                                                        title: Text('Music'),
+                                                                        value: isMusic,
+                                                                        onChanged: (bool value) {
+                                                                          setState(() {
+                                                                            isMusic = value;
+                                                                          });
+                                                                        },
+                                                                      ),
+                                                                      Divider(height: 1, color: Colors.grey[300]),
+                                                                      SwitchListTile(
+                                                                        title: Text('Dance'),
+                                                                        value: isDance,
+                                                                        onChanged: (bool value) {
+                                                                          setState(() {
+                                                                            isDance = value;
+                                                                          });
+                                                                        },
+                                                                      ),
+                                                                    ],
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                            ),
-                                                            Row(
-                                                              mainAxisAlignment: MainAxisAlignment.end,
-                                                              children: [
-                                                                // update button
-                                                                ElevatedButton(
-                                                                    onPressed: () {
-                                                                      setState(() {
-                                                                        if (isDance) selectedHobbies.add('Dancing');
-                                                                        if (isMusic) selectedHobbies.add('Listing Music');
-                                                                        if (isMovies) selectedHobbies.add('Watching Movies');
-                                                                        if (isGames) selectedHobbies.add('Playing Games');
-                                                                      });
-                                                                      if (validateInputs()) {
-                                                                        setState(() {
-                                                                          Map<String, dynamic> updatedsortedUser = {
-                                                                            'name': name.text,
-                                                                            'number': number.text,
-                                                                            'email': email.text,
-                                                                            'gender': tempGender,
-                                                                            'dateOfBirth': dateOfBirth.text,
-                                                                            'selectedCity': selectedCity,
-                                                                            'isDance': isDance ? 1 : 0,
-                                                                            'isMusic': isMusic ? 1 : 0,
-                                                                            'isMovies': isMovies ? 1 : 0,
-                                                                            'isGames': isGames ? 1 : 0,
-                                                                            'isFavourite': sortedUser[index]['isFavourite'],
-                                                                          };
-                                                                          updateUserFun(sortedUser[index]['id'], updatedsortedUser);
-                                                                        });
-
-                                                                        clerInput();
-                                                                        Navigator.pop(context);
-                                                                      }
-                                                                    },
-                                                                    child: Text('Update')
-                                                                ),
-                                                                SizedBox(width: 10),
-                                                                ElevatedButton(
-                                                                    onPressed: () {
-                                                                      Navigator.pop(context);
-                                                                      clerInput();
-                                                                    },
-                                                                    child: Text('Cancel')
-                                                                ),
+                                                                SizedBox(height: 20),
                                                               ],
                                                             ),
-                                                          ],
+                                                          ),
                                                         ),
-                                                      ),
+                                                      ],
                                                     ),
                                                   );
                                                 },
