@@ -129,6 +129,8 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
           DropdownMenuItem(child: Text('Name (Z-A)', style: TextStyle(fontSize: 14)), value: 'Name(z-a)'),
           DropdownMenuItem(child: Text('City (A-Z)', style: TextStyle(fontSize: 14)), value: 'City(a-z)'),
           DropdownMenuItem(child: Text('City (Z-A)', style: TextStyle(fontSize: 14)), value: 'City(z-a)'),
+          DropdownMenuItem(child: Text('Age (Ascending)', style: TextStyle(fontSize: 14)), value: 'Age(Ascending)'),
+          DropdownMenuItem(child: Text('Age (Descending)', style: TextStyle(fontSize: 14)), value: 'Age(Descending)'),
         ],
         onChanged: (value) {
           sortUserArray(value!);
@@ -154,8 +156,17 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
       if (selectedFilter == 'City(z-a)') {
         sortedUser.sort((a, b) => b['selectedCity'].compareTo(a['selectedCity']));
       }
+      if (selectedFilter == 'Age(Ascending)') {
+        sortedUser.sort((a, b) => calculateAge(a['dateOfBirth']).compareTo(calculateAge(b['dateOfBirth'])));
+      }
+      if (selectedFilter == 'Age(Descending)') {
+        sortedUser.sort((a, b) => calculateAge(b['dateOfBirth']).compareTo(calculateAge(a['dateOfBirth'])));
+      }
     });
   }
+
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -259,7 +270,7 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                       child: ListView.builder(
                         itemCount: sortedUser.length,
                         itemBuilder: (context, index) {
-
+                          print(calculateAge(sortedUser[index]['dateOfBirth']));
                           bool isVisible = true;
                           if(search != null){
                             isVisible = sortedUser[index]['name'].toLowerCase().contains(search!.toLowerCase()) || sortedUser[index]['selectedCity'].toLowerCase().contains(search!.toLowerCase());
@@ -385,7 +396,10 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                       //name
                                       child: Row(
                                         children: [
-                                          Icon(Icons.person,size: 28,color: Color(0xFF472272)),
+                                          CircleAvatar(
+                                            child:Icon(Icons.person,size: 28,color: Color(0xFF472272)),
+                                            backgroundColor: Color(0x388D68B6),
+                                          ),
                                           SizedBox(width: 8),
                                           Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -472,7 +486,6 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                                     child: Column(
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: [
-                                                        // Handle bar at the top
                                                         Container(
                                                           width: 36,
                                                           height: 4,

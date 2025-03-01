@@ -91,7 +91,10 @@ class _FavouritepageState extends State<Favouritepage> {
                                   //name
                                   child: Row(
                                     children: [
-                                      Icon(Icons.person,color: Color(0xFF472272)),
+                                      CircleAvatar(
+                                        child:Icon(Icons.person,size: 28,color: Color(0xFF472272)),
+                                        backgroundColor: Color(0x388D68B6),
+                                      ),
                                       SizedBox(width: 8),
                                       Text(users[index]['name'].length > 15 ? users[index]['name'].toString().substring(0,25) + '.....':users[index]['name']),
                                     ],

@@ -177,6 +177,13 @@ class SqliteDatabase {
   }
 }
 
+//Age
+int calculateAge(String dob) {
+  DateTime today = DateTime.now();
+  int age = today.year - int.parse(dob.split('-')[2]);
+  return age;
+}
+
 Future<void> showBottomSheetList(BuildContext context, Map<String, dynamic> user) {
   return showModalBottomSheet(
     context: context,
@@ -194,7 +201,7 @@ Future<void> showBottomSheetList(BuildContext context, Map<String, dynamic> user
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Heading
+            // Header
             Center(
               child: Text(
                 'User Information',
@@ -237,6 +244,25 @@ Future<void> showBottomSheetList(BuildContext context, Map<String, dynamic> user
                 Expanded(
                   child: Text(
                     user['number'],
+                    style: TextStyle(fontSize: 16, color: Colors.black54),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 8),
+            //age
+            Row(
+              children: [
+                Icon(Icons.accessibility_outlined,size: 22,color: Colors.black87,),
+                // Text(
+                //   'Number:',
+                //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87),
+                // ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    calculateAge(user['dateOfBirth']).toString(),
                     style: TextStyle(fontSize: 16, color: Colors.black54),
                     overflow: TextOverflow.ellipsis,
                   ),
