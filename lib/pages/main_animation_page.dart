@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:untitled/HomePage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -65,6 +66,12 @@ class _MainAnimationPageState extends State<MainAnimationPage>
   }
 
   Future<bool> isLogIn() async {
+    //for google login
+    User? user = FirebaseAuth.instance.currentUser;
+    if(user != null){
+      return true;
+    }
+    //for shared prefs
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool('isLogin') ?? false;
   }

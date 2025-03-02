@@ -383,70 +383,90 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                               color: Colors.deepPurpleAccent.withAlpha(20),
                               elevation: 0,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
+                                borderRadius: BorderRadius.circular(12.0),
                               ),
-                              child: SizedBox(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
                                   children: [
-                                    //
-                                    //details
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      //name
-                                      child: Row(
-                                        children: [
-                                          CircleAvatar(
-                                            child:Icon(Icons.person,size: 28,color: Color(0xFF472272)),
-                                            backgroundColor: Color(0x388D68B6),
-                                          ),
-                                          SizedBox(width: 8),
-                                          Column(
+                                    // User details
+                                    Row(
+                                      children: [
+                                        CircleAvatar(
+                                          child: Icon(Icons.person, size: 28, color: Color(0xFF472272)),
+                                          backgroundColor: Color(0x388D68B6),
+                                          radius: 24,
+                                        ),
+                                        SizedBox(width: 12),
+
+                                        Expanded(
+                                          child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text(sortedUser[index]['name'].length > 20? sortedUser[index]['name'].toString().substring(0,15) + '...' : sortedUser[index]['name'],style:TextStyle(fontSize: 15),),
-                                              Text(sortedUser[index]['selectedCity'],style:TextStyle(fontSize: 12,color: Colors.grey),),
+                                              Text(
+                                                sortedUser[index]['name'].length > 20 ? sortedUser[index]['name'].toString().substring(0, 15) + '...' : sortedUser[index]['name'],
+                                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                                              ),
+                                              SizedBox(height: 4),
+                                              Row(
+                                                children: [
+                                                  Icon(Icons.location_on, size: 14, color: Colors.grey),
+                                                  SizedBox(width: 4),
+                                                  Text(sortedUser[index]['selectedCity'], style: TextStyle(fontSize: 13, color: Colors.grey),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 2),
+                                              Row(
+                                                children: [
+                                                  Icon(Icons.cake, size: 14, color: Colors.grey),
+                                                  SizedBox(width: 4),
+                                                  Text(calculateAge(sortedUser[index]['dateOfBirth']).toString() + " years", style: TextStyle(fontSize: 13, color: Colors.grey),
+                                                  ),
+                                                ],
+                                              ),
                                             ],
-                                          )
-                                        ],
-                                      ),
+                                          ),
+                                        ),
+                                        // Favorite
+                                        InkWell(
+                                          onTap: () async {
+                                            if (sortedUser[index]['isFavourite'] == 1) {
+                                              await sb.updateUserFavourite(sortedUser[index]['id'], 0);
+                                            } else {
+                                              await sb.updateUserFavourite(sortedUser[index]['id'], 1);
+                                            }
+                                            setState(() {
+                                              sortedUser = List.from(users);
+                                              sortUserArray(selectedFilter);
+                                            });
+                                          },
+                                          child: CircleAvatar(
+                                            radius: 20,
+                                            backgroundColor: Colors.white.withOpacity(.5),
+                                            child: Icon(
+                                              sortedUser[index]['isFavourite'] == 1
+                                                  ? Icons.favorite
+                                                  : Icons.favorite_outline,
+                                              color: Colors.pink,
+                                              size: 18,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
 
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        // favourite
-                                        IconButton(onPressed: () async{
-                                          if(sortedUser[index]['isFavourite'] == 1){
-                                            await sb.updateUserFavourite(sortedUser[index]['id'],0);
-                                          }
-                                          else{
-                                            await sb.updateUserFavourite(sortedUser[index]['id'],1);
-                                          }
-                                          setState(() {
-                                            sortedUser = List.from(users);
-                                            sortUserArray(selectedFilter);
-                                          });
-                                          }, icon: Icon(sortedUser[index]['isFavourite'] == 1?Icons.favorite:Icons.favorite_outline,color: Colors.pink,size: 20,),
-                                        ),
+                                    // Divider
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                                      child: Divider(height: 1, thickness: 1, color: Colors.grey.withOpacity(0.2)),
+                                    ),
 
-                                        //with animation
-                                        // AnimatedBuilder(
-                                        //   animation: _controllers[index],
-                                        //   builder: (context, child) {
-                                        //     return IconButton(onPressed: () async{
-                                        //       _controllers[index].forward();
-                                        //       if(sortedUser[index]['isFavourite'] == 1){
-                                        //         await sb.updateUserFavourite(sortedUser[index]['id'],0);
-                                        //       }
-                                        //       else{
-                                        //         await sb.updateUserFavourite(sortedUser[index]['id'],1);
-                                        //       }
-                                        //       setState(() {});
-                                        //     }, icon: Icon(sortedUser[index]['isFavourite'] == 1?Icons.favorite:Icons.favorite_outline,color: Colors.pink,size: _animations[index].value,));
-                                        //   },
-                                        // ),
-                                        //edit
+                                    // Action buttons row
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        // Edit button
                                         IconButton(onPressed: (){
                                           setState(() {
                                             // var favouriteIndex = favouriteUser.indexWhere((user) =>
@@ -929,42 +949,109 @@ class _ListPageState extends State<ListPage> with SingleTickerProviderStateMixin
                                               );
                                             },
                                           );
-                                        }, icon: Icon(Icons.edit,color: Colors.green,)),
-                                        //delete
-                                        IconButton(onPressed: () async{
-                                          showDialog(context: context, builder: (context) {
-                                            return AlertDialog(
-                                              title: Text('Are you sure'),
-                                              content: Text('You want to delete the data'),
-                                              actions: [
-                                                ElevatedButton(onPressed: () async{
-                                                  await sb.deleteUsers(sortedUser[index]['id']);
-                                                  setState(() {});
-                                                  ScaffoldMessenger.of(context).showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(
-                                                        'User Deleted',
-                                                        style: TextStyle(color: Colors.white),
-                                                      ),
-                                                      backgroundColor: Colors.red,
-                                                      behavior: SnackBarBehavior.floating,
-                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                                      margin: EdgeInsets.all(16),
+                                        }, icon: Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                          decoration: BoxDecoration(
+                                            color: Colors.green.withOpacity(0.1),
+                                            borderRadius: BorderRadius.circular(8),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Icon(Icons.edit, size: 18, color: Colors.green),
+                                              SizedBox(width: 6),
+                                              Text(
+                                                'Edit',
+                                                style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )),
+
+                                        // Delete button
+                                        InkWell(
+                                          onTap: () async {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: Text('Are you sure?'),
+                                                  content: Text('You want to delete this user?'),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      child: Text('Cancel'),
                                                     ),
-                                                  );
-                                                  Navigator.of(context).pop();
-                                                }, child: Text('Delete')),
-                                                ElevatedButton(onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                }, child: Text('Cancel')),
-                                              ],
+                                                    ElevatedButton(
+                                                      onPressed: () async {
+                                                        showDialog(
+                                                          context: context,
+                                                          barrierDismissible: false,
+                                                          builder: (context) => Center(child: CircularProgressIndicator()),
+                                                        );
+
+                                                        await sb.deleteUsers(sortedUser[index]['id']);
+                                                        setState(() {
+                                                          sortedUser.removeAt(index); // Removes the user from the UI
+                                                        });
+                                                        Navigator.of(context).pop();
+
+                                                        ScaffoldMessenger.of(context).showSnackBar(
+                                                          SnackBar(
+                                                            content: Text(
+                                                              'User Deleted',
+                                                              style: TextStyle(color: Colors.white),
+                                                            ),
+                                                            backgroundColor: Colors.red,
+                                                            behavior: SnackBarBehavior.floating,
+                                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                                            margin: EdgeInsets.all(16),
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: Text('Delete',style: TextStyle(color: Colors.red),),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
                                             );
-                                          },);
-                                        }, icon: Icon(Icons.delete_outline_outlined,color: Colors.blue,)),
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                            decoration: BoxDecoration(
+                                              color: Colors.red.withOpacity(0.1),
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Icon(Icons.delete_outline, size: 18, color: Colors.red),
+                                                SizedBox(width: 6),
+                                                Text(
+                                                  'Delete',
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+
+                                        Row(
+                                          children: [
+                                            Text('Details'),
+                                            Icon(Icons.chevron_right),
+                                          ],
+                                        )
                                       ],
                                     ),
                                   ],
-                                )
+                                ),
                               ),
                             ),
                           ):SizedBox();

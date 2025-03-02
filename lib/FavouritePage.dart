@@ -78,62 +78,93 @@ class _FavouritepageState extends State<Favouritepage> {
                           showBottomSheetList(context,users[index]);
                         },
                         child: Card(
-                          color: Colors.deepPurpleAccent.withAlpha(30),
+                          color: Colors.deepPurpleAccent.withAlpha(20),
                           elevation: 0,
-                          child: SizedBox(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Column(
                               children: [
-                                //
-                                //details
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  //name
-                                  child: Row(
-                                    children: [
-                                      CircleAvatar(
-                                        child:Icon(Icons.person,size: 28,color: Color(0xFF472272)),
-                                        backgroundColor: Color(0x388D68B6),
-                                      ),
-                                      SizedBox(width: 8),
-                                      Text(users[index]['name'].length > 15 ? users[index]['name'].toString().substring(0,25) + '.....':users[index]['name']),
-                                    ],
-                                  ),
-                                ),
-                                //
-                                //unlike
-                                IconButton(onPressed: () async{
-                                  showDialog(context: context, builder: (context) {
-                                    return AlertDialog(
-                                      title: Text('Are you sure'),
-                                      content: Text('You want to unlike the data'),
-                                      actions: [
-                                        ElevatedButton(onPressed: () async{
-                                          await sb.updateUserFavourite(users[index]['id'],0);
-                                          setState(() {});
-                                          Navigator.of(context).pop();
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                'User is now unliked',
-                                                style: TextStyle(color: Colors.white),
+                                Row(
+                                  children: [
+                                    CircleAvatar(
+                                      child: Icon(Icons.person, size: 28, color: Color(0xFF472272)),
+                                      backgroundColor: Color(0x388D68B6),
+                                      radius: 24,
+                                    ),
+                                    SizedBox(width: 12),
+
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            sortedUser[index]['name'].length > 20 ? sortedUser[index]['name'].toString().substring(0, 15) + '...' : sortedUser[index]['name'],
+                                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                                          ),
+                                          SizedBox(height: 4),
+                                          Row(
+                                            children: [
+                                              Icon(Icons.location_on, size: 14, color: Colors.grey),
+                                              SizedBox(width: 4),
+                                              Text(sortedUser[index]['selectedCity'], style: TextStyle(fontSize: 13, color: Colors.grey),
                                               ),
-                                              backgroundColor: Colors.red,
-                                              behavior: SnackBarBehavior.floating,
-                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                              margin: EdgeInsets.all(16),
-                                            ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 2),
+                                          Row(
+                                            children: [
+                                              Icon(Icons.cake, size: 14, color: Colors.grey),
+                                              SizedBox(width: 4),
+                                              Text(calculateAge(sortedUser[index]['dateOfBirth']).toString() + " years", style: TextStyle(fontSize: 13, color: Colors.grey),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    // Favorite
+                                    CircleAvatar(
+                                      radius: 20,
+                                      backgroundColor: Colors.white.withOpacity(.5),
+                                      child: IconButton(onPressed: () async{
+                                        showDialog(context: context, builder: (context) {
+                                          return AlertDialog(
+                                            title: Text('Are you sure'),
+                                            content: Text('You want to unlike the data'),
+                                            actions: [
+                                              ElevatedButton(onPressed: () async{
+                                                await sb.updateUserFavourite(users[index]['id'],0);
+                                                setState(() {});
+                                                Navigator.of(context).pop();
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      'User is now unliked',
+                                                      style: TextStyle(color: Colors.white),
+                                                    ),
+                                                    backgroundColor: Colors.red,
+                                                    behavior: SnackBarBehavior.floating,
+                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                                    margin: EdgeInsets.all(16),
+                                                  ),
+                                                );
+                                              }, child: Text('Delete')),
+                                              ElevatedButton(onPressed: () {
+                                                Navigator.of(context).pop();
+                                              }, child: Text('Cancel')),
+                                            ],
                                           );
-                                        }, child: Text('Delete')),
-                                        ElevatedButton(onPressed: () {
-                                          Navigator.of(context).pop();
-                                        }, child: Text('Cancel')),
-                                      ],
-                                    );
-                                  },);
-                                }, icon: Icon(Icons.delete_outline_outlined,color: Colors.red,)),
+                                        },);
+                                      }, icon: Icon(Icons.favorite,color: Colors.red,size: 20,)),
+                                    ),
+                                  ],
+                                ),
+
                               ],
-                            )
+                            ),
                           ),
                         ),
                       ):SizedBox();
@@ -148,3 +179,4 @@ class _FavouritepageState extends State<Favouritepage> {
     );
   }
 }
+

@@ -44,7 +44,7 @@ class _HomepageState extends State<Homepage> {
     return false;
   }
 
-  void logOutUser() async{
+  Future<void> logOutUser() async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('isLogin');
     await prefs.remove('email');
@@ -75,12 +75,12 @@ class _HomepageState extends State<Homepage> {
                 content: Text('are you sure you want to Log Out'),
                 actions: [
                   ElevatedButton(onPressed: () {
-                    logOutUser();
-                    logOutWithGoogle();
-                  }, child: Text('LogOut')),
-                  ElevatedButton(onPressed: () {
                     Navigator.of(context).pop();
                   }, child: Text('Cancel')),
+                  ElevatedButton(onPressed: () async{
+                    await logOutWithGoogle();
+                    await logOutUser();
+                  }, child: Text('LogOut',style: TextStyle(color: Colors.red),)),
                 ],
               );
             },);
