@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:about/about.dart';
 import 'package:untitled/pages/aboutUs.dart';
 import 'package:untitled/pages/login_page.dart';
+import 'package:untitled/pages/page_graphs.dart';
 import 'package:untitled/utils.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
@@ -264,6 +265,41 @@ class _HomepageState extends State<Homepage> {
                     ),
                   ],
                 ),
+                Row(
+                  children: [
+                    InkWell(
+                      onTap: (){
+                        setState(() {
+                          currentIndex = 2;
+                        });
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Graphs()));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Card(
+                          elevation: 20,
+                          child: Container(
+                            decoration:BoxDecoration(
+                              color: Colors.deepPurpleAccent.withAlpha(90),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            width: 330,
+                            height: 50,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(Icons.analytics,color: Colors.white,size: 35,),
+                                SizedBox(width: 8,),
+                                Text('Analysis and Graphs ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),

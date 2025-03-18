@@ -8,6 +8,7 @@ import 'package:untitled/SignInPage.dart';
 import 'package:untitled/pages/AddPage.dart';
 import 'package:untitled/pages/ListPage.dart';
 import 'package:untitled/pages/aboutUs.dart';
+import 'package:untitled/pages/fullTemp.dart';
 import 'package:untitled/pages/login_page.dart';
 import 'package:untitled/pages/main_animation_page.dart';
 import 'package:untitled/temp.dart';
@@ -43,7 +44,9 @@ class MyApp extends StatelessWidget {
         value: (_) => const FadeUpwardsPageTransitionsBuilder(),),
         ),
       ),
-      home: MainAnimationPage(),
+      home:
+      MainAnimationPage(),
+      // TempFile(),
       // StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(),
       //   builder: (context, snapshot){
       //     if(snapshot.connectionState == ConnectionState.waiting){

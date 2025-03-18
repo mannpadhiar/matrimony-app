@@ -56,6 +56,12 @@ dev_dependencies:
   about: ^2.2.0
   aswdc_flutter_pub: ^1.0.27
   shared_preferences: ^2.5.2
+  http: ^1.3.0
+  open_file:
+  permission_handler:
+  path_provider:
+  pdf:
+  fl_chart: ^0.70.2
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

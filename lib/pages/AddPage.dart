@@ -369,6 +369,20 @@ class _AddPageState extends State<AddPage> {
 
                           isValidateUser = validateInputs();
                           if (isValidateUser) {
+                            addDataFromApi({
+                              'name': name.text,
+                              'number': number.text,
+                              'email': email.text.toLowerCase(),
+                              'gender': gender,
+                              'dateOfBirth': dateOfBirth.text,
+                              'selectedCity': selectedCity,
+                              'selectedHobbies': selectedHobbies,
+                              "isGames": isGames,
+                              "isMovies": isMovies,
+                              "isMusic": isMusic,
+                              "isDance": isDance,
+                              'isFavourite': isFav,
+                            });
                             sd.addUsers({
                               'name': name.text,
                               'number': number.text,
